@@ -137,3 +137,24 @@ Windows SDK rather than a cited page; the first build will confirm or refute the
 | 16 Nov. 2026 14:08 | 16 | 8 | `graphview.cpp`: inline assembly replaced with `_controlfp_s` (section 2 row 14). `GrphCalc.vcxproj`: `VcpkgEnabled` = `false` (section 3). All 16 assembly errors gone; 8 new errors appeared in `CCalculator.cpp`, which had not been compiled before because the build stopped earlier. All 8 have one cause (next row). |
 | 16 Nov. 2026 14:09 | 8 | 0 | `CCalculator.cpp`: `#undef small` added just before `CCalculator::lcm` (section 2 row 15). **Debug x64 builds and links: 0 errors.** Output: `Legacy Code\Win32\x64\Debug\GrphCalc.exe`. Not yet run. |
 | 16 Nov. 2026 14:09 | 0 | 0 | **Release x64 builds and links: 0 errors, 648 warnings** (none fixed, by instruction). By type: C4244 373, LNK4286 128, C4273 92, C4005 46, C4700 4, C4018 3, C4311 1, C4302 1. Output: `Legacy Code\Win32\x64\Release\GrphCalc.exe`. Not yet run. |
+
+## Step 2 smoke test (Release x64, 16 Nov. 2026, run by Claude via computer use)
+
+| Area | Test | Result |
+|------|------|--------|
+| Start-up | Launch from Explorer | Pass; no missing-file or DLL errors |
+| Arithmetic | `2+3*4`, `sqrt(2)^2+5!`, `0.1+0.2`, `1/3`, `sin(pi/6)`, `log(1000)` | Pass (14, 122, 0.3, 0.333..., 0.5, 3) |
+| Error handling | `1/0`; undefined variable | Pass; both show a Runtime Error dialog, no crash |
+| Constant `e` | `e`, `ln(e)` | 2.71828182846 and 1.00000000000036. `E` is defined to only 11 decimal places in `CCalculator.h` (line 152: `2.71828182846`), so this is a pre-existing precision limit, not a port defect. Candidate fix: use the full-precision value |
+| Data files | CONS and CONV menus | Pass; `constants.dat` and `units.dat` parse fully (exercises `GCGetLine`) |
+| 2D graph | `sin(x)`, `cos(x)`, zoom in, cursor read-out | Pass |
+| 3D graph (OpenGL) | `z = sin(x)*cos(y)`, mouse rotate, equations dialog | Pass; mouse rotation is very sensitive |
+| Help (`.chm`) | Help menu | Pass, but the window takes several seconds to appear |
+| Print | 2D Print dialog, Cancel, then more arithmetic | Pass; dialog opens, cancels cleanly, maths unaffected (exercises `_controlfp_s` code) |
+| Scripts | Script Library menu; If Testing; While Testing | Pass; all variables match the script logic (`good`=2, `yeahElse`=2, `i`=7, `j`=36) |
+
+Not tested: actually printing, saving/loading `.gcl` and `.gcs` files, DXF export, bitmap export, Win32 builds.
+
+## Owner decisions for later steps
+
+* **Help system:** the `.chm` format works today but is legacy and increasingly unsupported. Replace it with a modern help system in the Rust port (Step 3); do not invest in the `.chm` further.

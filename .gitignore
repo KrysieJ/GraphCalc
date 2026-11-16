@@ -366,3 +366,9 @@ FodyWeavers.xsd
 # The stock Visual Studio rule above ([Ww][Ii][Nn]32/) treats that name as build output and
 # would silently hide any NEW file added there (for example GrphCalc.vcxproj). Re-include it.
 !/Legacy Code/Win32/
+
+# Personal Claude Code settings (per-user permission rules); never commit.
+.claude/settings.local.json
+
+# msbuild file log written by the Step 2 build command
+/build.log
