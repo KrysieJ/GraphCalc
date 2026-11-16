@@ -48,7 +48,7 @@ protected:
 	afx_msg void OnClose();
 	afx_msg void OnKillfocusNMax();
 	afx_msg void OnKillfocusNMin();
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnAnimate();
 	afx_msg void OnChangeMilliseconds();
 	//}}AFX_MSG

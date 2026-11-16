@@ -192,23 +192,23 @@ BEGIN_MESSAGE_MAP(C3DGraph, CPropertyPage)
 	ON_WM_MBUTTONDOWN()
 	ON_WM_ERASEBKGND()
 	ON_WM_CONTEXTMENU()
-	ON_COMMAND(ID_3DGRAPH_COPYGRAPH, OnCopyGraph)
-	ON_COMMAND(ID_3DGRAPH_PRINT, OnPrint)
-	ON_COMMAND(ID_3DGRAPH_SAVEASBITMAP, OnSaveAsBitmap)
-	ON_COMMAND(ID_3DGRAPH_ZOOM_IN_Z, OnZoomInZ)
-	ON_COMMAND(ID_3DGRAPH_ZOOM_OUT_Z, OnZoomOutZ)
-	ON_COMMAND(ID_3DGRAPH_EXPORTTODFX, OnExportDXF)
-	ON_COMMAND(ID_3DGRAPH_EVALUATE, OnEvaluate)
-	ON_COMMAND(ID_3DGRAPH_RECOMPUTE, OnReCompute)
-	ON_COMMAND(ID_3DGRAPH_CENTERVIEW, OnCenterView)
+	ON_COMMAND(ID_3DGRAPH_COPYGRAPH, &C3DGraph::OnCopyGraph)
+	ON_COMMAND(ID_3DGRAPH_PRINT, &C3DGraph::OnPrint)
+	ON_COMMAND(ID_3DGRAPH_SAVEASBITMAP, &C3DGraph::OnSaveAsBitmap)
+	ON_COMMAND(ID_3DGRAPH_ZOOM_IN_Z, &C3DGraph::OnZoomInZ)
+	ON_COMMAND(ID_3DGRAPH_ZOOM_OUT_Z, &C3DGraph::OnZoomOutZ)
+	ON_COMMAND(ID_3DGRAPH_EXPORTTODFX, &C3DGraph::OnExportDXF)
+	ON_COMMAND(ID_3DGRAPH_EVALUATE, &C3DGraph::OnEvaluate)
+	ON_COMMAND(ID_3DGRAPH_RECOMPUTE, &C3DGraph::OnReCompute)
+	ON_COMMAND(ID_3DGRAPH_CENTERVIEW, &C3DGraph::OnCenterView)
 	ON_WM_KEYDOWN()
 	ON_WM_GETDLGCODE()
 	ON_WM_TIMER()
 	ON_WM_INITMENUPOPUP()
 	//}}AFX_MSG_MAP
-	ON_COMMAND_RANGE(ID_3DGRAPH_EQUATIONS, ID_3DGRAPH_OPTIONS, OnOptions)
-	ON_COMMAND_RANGE(ID_3DGRAPH_AUTOROTATE_ALLAXIS, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, OnAutoRotate)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_3DGRAPH_AUTOROTATE_ALLAXIS, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, OnUpdate3DAutoRotate)
+	ON_COMMAND_RANGE(ID_3DGRAPH_EQUATIONS, ID_3DGRAPH_OPTIONS, &C3DGraph::OnOptions)
+	ON_COMMAND_RANGE(ID_3DGRAPH_AUTOROTATE_ALLAXIS, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, &C3DGraph::OnAutoRotate)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_3DGRAPH_AUTOROTATE_ALLAXIS, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, &C3DGraph::OnUpdate3DAutoRotate)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -786,7 +786,8 @@ void C3DGraph::RenderGraph()
 
 	glEnable(GL_POLYGON_OFFSET_FILL);
 	glPolygonOffset(1.0, 1.5);
-	for (int m = 0; m < MAX_3D_EQS; ++m) {
+	int m;
+	for (m = 0; m < MAX_3D_EQS; ++m) {
 		if (m_3DEquations[m].on && !m_bFailedEquationGeneration) {
 			glCallList(m_GLlist[m]);
 		}
@@ -1357,7 +1358,7 @@ void C3DGraph::OnRButtonDown(UINT nFlags, CPoint point)
 		graph.CreatePopupMenu();
 		CMenu PopUp3DGraph;
 		PopUp3DGraph.LoadMenu(IDR_3DGRAPH);
-		graph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)PopUp3DGraph.m_hMenu, "3D Graph");
+		graph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)PopUp3DGraph.m_hMenu, "3D Graph");
 		PopUp3DGraph.Detach();
 
 		graph.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,
@@ -2022,7 +2023,8 @@ int C3DGraph::InitOpenGl(GraphDestination dest, HDC hDC)
 	if (CreateViewGLContext(hDC) == FALSE)
 		return 0;
 
-	for (int n = 0; n < MAX_3D_EQS; ++n) {
+	int n;
+	for (n = 0; n < MAX_3D_EQS; ++n) {
 		m_GLlist[n] = glGenLists(1);
 	}
 
@@ -2255,7 +2257,7 @@ void C3DGraph::ExportDXF(CString filename)
 {
 	m_NoRePaint = true;
 
-	::ofstream outfile;
+	std::ofstream outfile;
 	outfile.open(filename);
 	// outfile.write(&char or CString.GetBuffer, length of string or char)
 	CString buffer;
@@ -2754,7 +2756,7 @@ UINT C3DGraph::OnGetDlgCode() {
 	return(DLGC_WANTALLKEYS);
 }
 
-void C3DGraph::OnTimer(UINT nIDEvent)
+void C3DGraph::OnTimer(UINT_PTR nIDEvent)
 {
 	if (m_bXAutoRotate || m_bAllAutoRotate)
 		m_xRotate -= (1 * m_iRotateSpeed);
@@ -2994,8 +2996,8 @@ BOOL C3DGraph::OnInitDialog()
 	CGrphCalcDlg* pDlg = (CGrphCalcDlg*)STATIC_DOWNCAST(CDialog, AfxGetMainWnd());
 	pDlg->AddScriptLibraryMenu(m_Menu3DGraph, 3);
 
-	m_Menu3DGraph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)PopUp3DGraph.m_hMenu, "3D Graph");
-	m_Menu3DGraph.InsertMenu(6, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)PopUpView.m_hMenu, "View");
+	m_Menu3DGraph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)PopUp3DGraph.m_hMenu, "3D Graph");
+	m_Menu3DGraph.InsertMenu(6, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)PopUpView.m_hMenu, "View");
 
 	PopUp3DGraph.Detach();
 	PopUpView.Detach();

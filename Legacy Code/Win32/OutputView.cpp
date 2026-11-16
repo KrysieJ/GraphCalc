@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <afxtempl.h>
-#include <fstream.h>
+#include <fstream>
 #include "GrphCalc.h"
 #include "OutputView.h"
 #include "GrphCalcDlg.h"
@@ -87,10 +87,10 @@ BEGIN_MESSAGE_MAP(OutputView, CPropertyPage)
 	//{{AFX_MSG_MAP(OutputView)
 	ON_WM_SHOWWINDOW()
 	ON_WM_KILLFOCUS()
-	ON_NOTIFY(NM_KILLFOCUS, IDC_OUTPUT, OnKillfocusOutput)
+	ON_NOTIFY(NM_KILLFOCUS, IDC_OUTPUT, &OutputView::OnKillfocusOutput)
 	ON_WM_CAPTURECHANGED()
 	ON_WM_SIZE()
-	ON_NOTIFY(EN_KILLFOCUS, IDC_OUTPUT, OnKillfocusOutput)
+	ON_NOTIFY(EN_KILLFOCUS, IDC_OUTPUT, &OutputView::OnKillfocusOutput)
 	ON_WM_PAINT()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -111,8 +111,8 @@ END_MESSAGE_MAP()
 void OutputView::OnEnter(CString Formula, CCalculator &Calculator, CComboBox *FormulaCtrl)
 {
 #ifdef TEST_MODE
-	::ofstream ofile;
-	ofile.open("C:\\GC Test Results.txt", ios::app, filebuf::openprot);
+	std::ofstream ofile;
+	ofile.open("C:\\GC Test Results.txt", std::ios::out | std::ios::app);
 #endif
 
 	CString ans;
@@ -774,7 +774,7 @@ void OutputView::OnSize(UINT nType, int cx, int cy)
 
 void OutputView::SaveOutput()
 {
-	::ofstream outfile;
+	std::ofstream outfile;
 	char pound = '#';
 	char new_line = '\n';
 
@@ -813,10 +813,10 @@ void OutputView::SaveOutput()
 
 void OutputView::LoadOutput()
 {
-	::ifstream infile;
-	infile.open("output_history.dat", ios::nocreate);
+	std::ifstream infile;
+	infile.open("output_history.dat");
 
-	if (infile.rdstate() == ios::failbit) {
+	if (infile.rdstate() == std::ios::failbit) {
 		//AfxMessageBox("Error opening output_history.dat", MB_OK | MB_ICONEXCLAMATION, 0);
 		return;
 	}
@@ -826,14 +826,14 @@ void OutputView::LoadOutput()
 	int part(0);  // 0 - input, 1 - long output, 2 - answer, 3 - base
 	char *line = new char[1000];
 
-	infile.getline(line, 1000, '\n');
+	GCGetLine(infile, line, 1000, '\n');
 	value = (LPCTSTR)line;
 	value.TrimLeft();
 	value.TrimRight();
 
 	if (value.IsEmpty() || value[0] != '#') {
 		infile.close();
-		delete line;
+		delete[] line;
 		return;
 	}
 
@@ -843,7 +843,7 @@ void OutputView::LoadOutput()
 		done = false;
 
 		while (part < 4 && !infile.eof()) {
-			infile.getline(line, 1000, '\n');
+			GCGetLine(infile, line, 1000, '\n');
 			value = (LPCTSTR)line;
 			value.TrimLeft();
 			value.TrimRight();
@@ -878,7 +878,7 @@ void OutputView::LoadOutput()
 		}
 	}
 
-	delete line;
+	delete[] line;
 	infile.close();
 }
 
@@ -919,7 +919,7 @@ BOOL OutputView::OnInitDialog()
 	CGrphCalcDlg* pDlg = (CGrphCalcDlg*)STATIC_DOWNCAST(CDialog, AfxGetMainWnd());
 	pDlg->AddScriptLibraryMenu(m_MenuOutput, 3);
 
-	m_MenuOutput.InsertMenu(5, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)PopUpView.m_hMenu, "View");
+	m_MenuOutput.InsertMenu(5, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)PopUpView.m_hMenu, "View");
 	PopUpView.Detach();
 
 	return TRUE;  // return TRUE unless you set the focus to a control
@@ -939,7 +939,7 @@ void OutputView::OnPaint()
 	// Do not call CPropertyPage::OnPaint() for painting messages
 }
 
-static DWORD CALLBACK StreamOutCtrl(DWORD dwCookie, LPBYTE pbBuff,
+static DWORD CALLBACK StreamOutCtrl(DWORD_PTR dwCookie, LPBYTE pbBuff,
 	LONG cb, LONG* pcb)
 {
 	CFile *pstr = (CFile*)dwCookie;
@@ -955,7 +955,7 @@ void OutputView::SaveOutputToFile(CString strFile)
 	CFile sf(strFile, CFile::modeWrite | CFile::modeCreate);
 
 	EDITSTREAM es;
-	es.dwCookie = (DWORD)&sf;
+	es.dwCookie = (DWORD_PTR)&sf;
 	es.dwError = 0;
 	es.pfnCallback = StreamOutCtrl;
 

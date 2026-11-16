@@ -40,9 +40,9 @@ void C2DOptionsMode::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C2DOptionsMode, CPropertyPage)
 	//{{AFX_MSG_MAP(C2DOptionsMode)
-	ON_BN_CLICKED(IDC_MODE, OnMode)
-	ON_BN_CLICKED(IDC_MODE2, OnMode)
-	ON_BN_CLICKED(IDC_MODE3, OnMode)
+	ON_BN_CLICKED(IDC_MODE, &C2DOptionsMode::OnMode)
+	ON_BN_CLICKED(IDC_MODE2, &C2DOptionsMode::OnMode)
+	ON_BN_CLICKED(IDC_MODE3, &C2DOptionsMode::OnMode)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

@@ -17,7 +17,7 @@ class CFindAreaDlg : public CDialog
 	// Construction
 public:
 	CFindAreaDlg(CWnd* pParent = NULL);   // standard constructor
-	PassEq(EquationT *eqs, CCalculator *calc);
+	void PassEq(EquationT *eqs, CCalculator *calc);
 
 	// Dialog Data
 		//{{AFX_DATA(CFindAreaDlg)

@@ -37,10 +37,10 @@ void CEquationSolverDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CEquationSolverDlg, CDialog)
 	//{{AFX_MSG_MAP(CEquationSolverDlg)
-	ON_BN_CLICKED(ID_SOLVE, OnSolve)
-	ON_EN_KILLFOCUS(IDC_GUESS, OnKillfocusGuess)
+	ON_BN_CLICKED(ID_SOLVE, &CEquationSolverDlg::OnSolve)
+	ON_EN_KILLFOCUS(IDC_GUESS, &CEquationSolverDlg::OnKillfocusGuess)
 	ON_WM_KEYDOWN()
-	ON_BN_CLICKED(IDC_Help, OnHelp)
+	ON_BN_CLICKED(IDC_Help, &CEquationSolverDlg::OnHelp)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

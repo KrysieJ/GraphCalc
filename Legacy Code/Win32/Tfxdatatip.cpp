@@ -615,7 +615,7 @@ void TFXDataTip::OnMouseMove(UINT nFlags, CPoint point)
 *
 ******************************************************************************
 */
-void TFXDataTip::OnTimer(UINT nIDEvent)
+void TFXDataTip::OnTimer(UINT_PTR nIDEvent)
 {
 	KillTimer(m_timer);
 

@@ -10,6 +10,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include <SDKDDKVer.h>		// target the newest Windows the installed SDK supports
+
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 #include <afxwin.h>         // MFC core and standard components
@@ -18,7 +20,6 @@
 #include <htmlhelp.h>
 #include <gl\GL.h>
 #include <gl\GLU.h>
-#include <GLAux.h>
 #include "Structs.h"
 
 #ifdef DEBUG

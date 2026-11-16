@@ -407,7 +407,7 @@ private:
 	// Initialization Functions /////////////////////
 	void InitUnits();
 	void InitConstants();
-	int InitConstCat(CArray<ConstCatT, ConstCatT> &cat, ::ifstream *infile, int level);
+	int InitConstCat(CArray<ConstCatT, ConstCatT> &cat, std::ifstream *infile, int level);
 	void SetRunTimeStack(int stack);
 	///////////////////////////////////////////////////
 

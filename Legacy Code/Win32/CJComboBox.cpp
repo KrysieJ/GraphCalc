@@ -55,7 +55,7 @@ void CCJComboBox::OnLButtonUp(UINT nFlags, CPoint point)
 	CComboBox::OnLButtonUp(nFlags, point);
 }
 
-void CCJComboBox::OnTimer(UINT nIDEvent)
+void CCJComboBox::OnTimer(UINT_PTR nIDEvent)
 {
 	POINT pt;
 	GetCursorPos(&pt);

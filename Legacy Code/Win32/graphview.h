@@ -328,7 +328,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg BOOL OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult);
 
-	afx_msg void On2DNSliderClosing(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT On2DNSliderClosing(WPARAM wParam, LPARAM lParam);
 #ifdef GRAPH2D_INFOBAR
 	afx_msg void OnInfoBarEqOn();
 	//afx_msg void OnInfoBarEqChange();

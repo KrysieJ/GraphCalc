@@ -52,16 +52,16 @@ BEGIN_MESSAGE_MAP(C2DNSliderDlg, CDialog)
 	//{{AFX_MSG_MAP(C2DNSliderDlg)
 	ON_WM_HSCROLL()
 	ON_WM_LBUTTONDOWN()
-	ON_EN_CHANGE(IDC_N_MIN, OnChangeNMin)
-	ON_EN_CHANGE(IDC_N_MAX, OnChangeNMax)
-	ON_EN_CHANGE(IDC_N_STEP, OnChangeNStep)
+	ON_EN_CHANGE(IDC_N_MIN, &C2DNSliderDlg::OnChangeNMin)
+	ON_EN_CHANGE(IDC_N_MAX, &C2DNSliderDlg::OnChangeNMax)
+	ON_EN_CHANGE(IDC_N_STEP, &C2DNSliderDlg::OnChangeNStep)
 	ON_WM_CLOSE()
-	ON_EN_KILLFOCUS(IDC_N_MAX, OnKillfocusNMax)
-	ON_EN_KILLFOCUS(IDC_N_MIN, OnKillfocusNMin)
+	ON_EN_KILLFOCUS(IDC_N_MAX, &C2DNSliderDlg::OnKillfocusNMax)
+	ON_EN_KILLFOCUS(IDC_N_MIN, &C2DNSliderDlg::OnKillfocusNMin)
 	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_ANIMATE, OnAnimate)
+	ON_BN_CLICKED(IDC_ANIMATE, &C2DNSliderDlg::OnAnimate)
 	ON_WM_WINDOWPOSCHANGING()
-	ON_EN_CHANGE(IDC_MILLISECONDS, OnChangeMilliseconds)
+	ON_EN_CHANGE(IDC_MILLISECONDS, &C2DNSliderDlg::OnChangeMilliseconds)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -303,7 +303,7 @@ void C2DNSliderDlg::OnKillfocusNMin()
 	UpdateSliderCtrl();
 }
 
-void C2DNSliderDlg::OnTimer(UINT nIDEvent)
+void C2DNSliderDlg::OnTimer(UINT_PTR nIDEvent)
 {
 	CSliderCtrl* pSlide = (CSliderCtrl*)GetDlgItem(IDC_N_SPIN);
 	double n = m_dMin + (m_dStep * double(pSlide->GetPos()));

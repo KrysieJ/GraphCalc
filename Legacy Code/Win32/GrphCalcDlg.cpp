@@ -30,7 +30,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include <afxtempl.h>
-#include <fstream.h>
+#include <fstream>
 
 // needed for accelerator keys
 extern HWND    ghDlg;          // Handle to main dialog box
@@ -303,10 +303,10 @@ void CGrphCalcDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CGrphCalcDlg, CDialog)
-	ON_MESSAGE(WM_USER_CHANGE_OBJECT_PROPERTIES, OnGraphOptionsChanged)
-	ON_MESSAGE(WM_3DOPTIONS_CHANGE, On3DGraphOptionsChanged)
-	ON_MESSAGE(WM_2DGRAPH_CENTER, On2DCenterGraph)
-	ON_MESSAGE(WM_2DGRAPH_N_SLIDER_UPDATE, On2DNSliderUpdate)
+	ON_MESSAGE(WM_USER_CHANGE_OBJECT_PROPERTIES, &CGrphCalcDlg::OnGraphOptionsChanged)
+	ON_MESSAGE(WM_3DOPTIONS_CHANGE, &CGrphCalcDlg::On3DGraphOptionsChanged)
+	ON_MESSAGE(WM_2DGRAPH_CENTER, &CGrphCalcDlg::On2DCenterGraph)
+	ON_MESSAGE(WM_2DGRAPH_N_SLIDER_UPDATE, &CGrphCalcDlg::On2DNSliderUpdate)
 	//{{AFX_MSG_MAP(CGrphCalcDlg)
 	ON_WM_SYSCOMMAND()
 	ON_WM_DESTROY()
@@ -314,139 +314,139 @@ BEGIN_MESSAGE_MAP(CGrphCalcDlg, CDialog)
 	ON_WM_INITMENUPOPUP()
 	ON_WM_QUERYDRAGICON()
 	ON_WM_CREATE()
-	ON_COMMAND(ID_OPTIONS_MODE, OnOptionsMode)
-	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
+	ON_COMMAND(ID_OPTIONS_MODE, &CGrphCalcDlg::OnOptionsMode)
+	ON_COMMAND(ID_APP_ABOUT, &CGrphCalcDlg::OnAppAbout)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_CONTEXTMENU()
-	ON_BN_CLICKED(IDC_ENTER, OnEnter)
-	ON_COMMAND(ID_VIEW_FULLSCREEN, OnViewFullscreen)
+	ON_BN_CLICKED(IDC_ENTER, &CGrphCalcDlg::OnEnter)
+	ON_COMMAND(ID_VIEW_FULLSCREEN, &CGrphCalcDlg::OnViewFullscreen)
 	ON_WM_SIZE()
 	ON_WM_GETMINMAXINFO()
-	ON_COMMAND(ID_GRAPH_ADDGRAPHTAB, OnGraphAddGraphTab)
-	ON_COMMAND(ID_GRAPH_REMOVEGRAPHTAB, OnGraphRemovegraphtab)
-	ON_COMMAND(ID_GRAPH_ZOOM_IN_XY, OnGraphZoomInXY)
-	ON_COMMAND(ID_GRAPH_ZOOM_OUT_XY, OnGraphZoomOutXY)
-	ON_COMMAND(ID_GRAPH_ZOOM_IN_X, OnGraphZoomInX)
-	ON_COMMAND(ID_GRAPH_ZOOM_IN_Y, OnGraphZoomInY)
-	ON_COMMAND(ID_GRAPH_ZOOM_DECIMAL, OnGraphZoomDecimal)
-	ON_COMMAND(ID_GRAPH_ZOOM_STANDARD, OnGraphZoomStandard)
-	ON_COMMAND(ID_GRAPH_ZOOM_TRIG, OnGraphZoomTrig)
-	ON_COMMAND(ID_GRAPH_ZOOM_OUT_X, OnGraphZoomOutX)
-	ON_COMMAND(ID_GRAPH_ZOOM_OUT_Y, OnGraphZoomOutY)
-	ON_COMMAND(ID_GRAPH_ZOOM_INTEGER, OnGraphZoomInteger)
-	ON_COMMAND(ID_GRAPH_ZOOM_FIT, OnGraphZoomFit)
-	ON_COMMAND(ID_GRAPH_GRAPHTRACE, OnGraphGraphtrace)
-	ON_COMMAND(ID_HELP, OnHelp)
-	ON_COMMAND(ID_GRAPH_FINDAREA, OnGraphFindArea)
-	ON_COMMAND(ID_GRAPH_RENAMETAB, OnGraphRenametab)
-	ON_COMMAND(ID_OPTIONS_SOUND_EFFECTS, OnOptionsSoundEffects)
-	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
-	ON_COMMAND(ID_EDIT_CUT, OnEditCut)
-	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
-	ON_COMMAND(ID_FILE_CATALOG, OnFileCatalog)
+	ON_COMMAND(ID_GRAPH_ADDGRAPHTAB, &CGrphCalcDlg::OnGraphAddGraphTab)
+	ON_COMMAND(ID_GRAPH_REMOVEGRAPHTAB, &CGrphCalcDlg::OnGraphRemovegraphtab)
+	ON_COMMAND(ID_GRAPH_ZOOM_IN_XY, &CGrphCalcDlg::OnGraphZoomInXY)
+	ON_COMMAND(ID_GRAPH_ZOOM_OUT_XY, &CGrphCalcDlg::OnGraphZoomOutXY)
+	ON_COMMAND(ID_GRAPH_ZOOM_IN_X, &CGrphCalcDlg::OnGraphZoomInX)
+	ON_COMMAND(ID_GRAPH_ZOOM_IN_Y, &CGrphCalcDlg::OnGraphZoomInY)
+	ON_COMMAND(ID_GRAPH_ZOOM_DECIMAL, &CGrphCalcDlg::OnGraphZoomDecimal)
+	ON_COMMAND(ID_GRAPH_ZOOM_STANDARD, &CGrphCalcDlg::OnGraphZoomStandard)
+	ON_COMMAND(ID_GRAPH_ZOOM_TRIG, &CGrphCalcDlg::OnGraphZoomTrig)
+	ON_COMMAND(ID_GRAPH_ZOOM_OUT_X, &CGrphCalcDlg::OnGraphZoomOutX)
+	ON_COMMAND(ID_GRAPH_ZOOM_OUT_Y, &CGrphCalcDlg::OnGraphZoomOutY)
+	ON_COMMAND(ID_GRAPH_ZOOM_INTEGER, &CGrphCalcDlg::OnGraphZoomInteger)
+	ON_COMMAND(ID_GRAPH_ZOOM_FIT, &CGrphCalcDlg::OnGraphZoomFit)
+	ON_COMMAND(ID_GRAPH_GRAPHTRACE, &CGrphCalcDlg::OnGraphGraphtrace)
+	ON_COMMAND(ID_HELP, &CGrphCalcDlg::OnHelp)
+	ON_COMMAND(ID_GRAPH_FINDAREA, &CGrphCalcDlg::OnGraphFindArea)
+	ON_COMMAND(ID_GRAPH_RENAMETAB, &CGrphCalcDlg::OnGraphRenametab)
+	ON_COMMAND(ID_OPTIONS_SOUND_EFFECTS, &CGrphCalcDlg::OnOptionsSoundEffects)
+	ON_COMMAND(ID_EDIT_COPY, &CGrphCalcDlg::OnEditCopy)
+	ON_COMMAND(ID_EDIT_CUT, &CGrphCalcDlg::OnEditCut)
+	ON_COMMAND(ID_EDIT_PASTE, &CGrphCalcDlg::OnEditPaste)
+	ON_COMMAND(ID_FILE_CATALOG, &CGrphCalcDlg::OnFileCatalog)
 	ON_WM_ACTIVATE()
-	ON_COMMAND(ID_FILE_OPTIONS_TOOLTIPS, OnFileOptionsTooltips)
-	ON_COMMAND(ID_FILE_OPTIONS_EXPRESSIONFONT, OnFileOptionsExpression)
-	ON_COMMAND(ID_FILE_OPTIONS_ANSWERFONT, OnFileOptionsAnswer)
-	ON_COMMAND(ID_GRAPH_ZOOM_PREVIOUSRANGE, OnGraphZoomPreviousRange)
+	ON_COMMAND(ID_FILE_OPTIONS_TOOLTIPS, &CGrphCalcDlg::OnFileOptionsTooltips)
+	ON_COMMAND(ID_FILE_OPTIONS_EXPRESSIONFONT, &CGrphCalcDlg::OnFileOptionsExpression)
+	ON_COMMAND(ID_FILE_OPTIONS_ANSWERFONT, &CGrphCalcDlg::OnFileOptionsAnswer)
+	ON_COMMAND(ID_GRAPH_ZOOM_PREVIOUSRANGE, &CGrphCalcDlg::OnGraphZoomPreviousRange)
 	ON_WM_SHOWWINDOW()
-	ON_COMMAND(ID_FILE_OPTIONS_SAVESETTINGSNOW, OnFileOptionsSavesettingsnow)
-	ON_COMMAND(ID_FILE_OPTIONS_SAVESETTINGSONEXIT, OnFileOptionsSavesettingsonexit)
-	ON_COMMAND(ID_FILE_LOADSETTINGSFILE, OnFileLoadsettingsfile)
-	ON_COMMAND(ID_FILE_SAVESETTINGSAS, OnFileSavesettingsas)
-	ON_COMMAND(ID_APP_EXIT, OnAppExit)
-	ON_COMMAND(ID_FILE_OPTIONS_DISAPLAYDETAILEDOUTPUT, OnFileOptionsDisaplaydetailedoutput)
-	ON_COMMAND(ID_GRAPH_EVALUATE, OnGraphEvaluate)
-	ON_COMMAND(ID_GRAPH_TANGENTLINE, OnGraphTangentline)
-	ON_COMMAND(ID_GRAPH_DISTANCE, OnGraphDistance)
-	ON_COMMAND(ID_GRAPH_COPYGRAPH, OnGraphCopygraph)
-	ON_COMMAND(ID_GRAPH_CLEARTANGENTLINES, OnGraphCleartangentlines)
-	ON_COMMAND(ID_OPTIONS_ALWAYSONTOP, OnOptionsAlwaysontop)
-	ON_CBN_EDITCHANGE(IDC_FORMULA, OnEditchangeFormula)
-	ON_COMMAND(ID_GRAPH_PRINT, OnGraphPrint)
-	ON_COMMAND(ID_FILE_PRINT, OnFilePrint)
-	ON_COMMAND(ID_FILE_RUNSCRIPT, OnFileRunscript)
-	ON_COMMAND(ID_INSERT_COMMAND, OnInsertCommand)
-	ON_COMMAND(ID_OPTIONS_PROGRAMOPTIONS, OnOptionsProgramoptions)
-	ON_COMMAND(ID_FILE_SAVESCRIPT, OnFileSaveScript)
-	ON_COMMAND(ID_CTRLG, OnCtrlG)
+	ON_COMMAND(ID_FILE_OPTIONS_SAVESETTINGSNOW, &CGrphCalcDlg::OnFileOptionsSavesettingsnow)
+	ON_COMMAND(ID_FILE_OPTIONS_SAVESETTINGSONEXIT, &CGrphCalcDlg::OnFileOptionsSavesettingsonexit)
+	ON_COMMAND(ID_FILE_LOADSETTINGSFILE, &CGrphCalcDlg::OnFileLoadsettingsfile)
+	ON_COMMAND(ID_FILE_SAVESETTINGSAS, &CGrphCalcDlg::OnFileSavesettingsas)
+	ON_COMMAND(ID_APP_EXIT, &CGrphCalcDlg::OnAppExit)
+	ON_COMMAND(ID_FILE_OPTIONS_DISAPLAYDETAILEDOUTPUT, &CGrphCalcDlg::OnFileOptionsDisaplaydetailedoutput)
+	ON_COMMAND(ID_GRAPH_EVALUATE, &CGrphCalcDlg::OnGraphEvaluate)
+	ON_COMMAND(ID_GRAPH_TANGENTLINE, &CGrphCalcDlg::OnGraphTangentline)
+	ON_COMMAND(ID_GRAPH_DISTANCE, &CGrphCalcDlg::OnGraphDistance)
+	ON_COMMAND(ID_GRAPH_COPYGRAPH, &CGrphCalcDlg::OnGraphCopygraph)
+	ON_COMMAND(ID_GRAPH_CLEARTANGENTLINES, &CGrphCalcDlg::OnGraphCleartangentlines)
+	ON_COMMAND(ID_OPTIONS_ALWAYSONTOP, &CGrphCalcDlg::OnOptionsAlwaysontop)
+	ON_CBN_EDITCHANGE(IDC_FORMULA, &CGrphCalcDlg::OnEditchangeFormula)
+	ON_COMMAND(ID_GRAPH_PRINT, &CGrphCalcDlg::OnGraphPrint)
+	ON_COMMAND(ID_FILE_PRINT, &CGrphCalcDlg::OnFilePrint)
+	ON_COMMAND(ID_FILE_RUNSCRIPT, &CGrphCalcDlg::OnFileRunscript)
+	ON_COMMAND(ID_INSERT_COMMAND, &CGrphCalcDlg::OnInsertCommand)
+	ON_COMMAND(ID_OPTIONS_PROGRAMOPTIONS, &CGrphCalcDlg::OnOptionsProgramoptions)
+	ON_COMMAND(ID_FILE_SAVESCRIPT, &CGrphCalcDlg::OnFileSaveScript)
+	ON_COMMAND(ID_CTRLG, &CGrphCalcDlg::OnCtrlG)
 	ON_WM_CLOSE()
-	ON_UPDATE_COMMAND_UI(ID_OPTIONS_SOUND_EFFECTS, OnUpdateOptionsSoundEffects)
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_FINDAREA, OnUpdateGraphFindarea)
-	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_TOOLTIPS, OnUpdateFileOptionsTooltips)
-	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_SAVESETTINGSONEXIT, OnUpdateFileOptionsSavesettingsonexit)
-	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_DISAPLAYDETAILEDOUTPUT, OnUpdateFileOptionsDisaplaydetailedoutput)
-	ON_UPDATE_COMMAND_UI(ID_FILE_LOADSETTINGSFILE, OnUpdateFileLoadsettingsfile)
-	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_SAVESETTINGSNOW, OnUpdateFileOptionsSavesettingsnow)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_COPY, OnUpdateEditCopy)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_CUT, OnUpdateEditCut)
-	ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, OnUpdateEditPaste)
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_DISTANCE, OnUpdateGraphDistance)
-	ON_UPDATE_COMMAND_UI(ID_OPTIONS_ALWAYSONTOP, OnUpdateOptionsAlwaysontop)
-	ON_UPDATE_COMMAND_UI(ID_FILE_PRINT, OnUpdateFilePrint)
+	ON_UPDATE_COMMAND_UI(ID_OPTIONS_SOUND_EFFECTS, &CGrphCalcDlg::OnUpdateOptionsSoundEffects)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_FINDAREA, &CGrphCalcDlg::OnUpdateGraphFindarea)
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_TOOLTIPS, &CGrphCalcDlg::OnUpdateFileOptionsTooltips)
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_SAVESETTINGSONEXIT, &CGrphCalcDlg::OnUpdateFileOptionsSavesettingsonexit)
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_DISAPLAYDETAILEDOUTPUT, &CGrphCalcDlg::OnUpdateFileOptionsDisaplaydetailedoutput)
+	ON_UPDATE_COMMAND_UI(ID_FILE_LOADSETTINGSFILE, &CGrphCalcDlg::OnUpdateFileLoadsettingsfile)
+	ON_UPDATE_COMMAND_UI(ID_FILE_OPTIONS_SAVESETTINGSNOW, &CGrphCalcDlg::OnUpdateFileOptionsSavesettingsnow)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_COPY, &CGrphCalcDlg::OnUpdateEditCopy)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_CUT, &CGrphCalcDlg::OnUpdateEditCut)
+	ON_UPDATE_COMMAND_UI(ID_EDIT_PASTE, &CGrphCalcDlg::OnUpdateEditPaste)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_DISTANCE, &CGrphCalcDlg::OnUpdateGraphDistance)
+	ON_UPDATE_COMMAND_UI(ID_OPTIONS_ALWAYSONTOP, &CGrphCalcDlg::OnUpdateOptionsAlwaysontop)
+	ON_UPDATE_COMMAND_UI(ID_FILE_PRINT, &CGrphCalcDlg::OnUpdateFilePrint)
 	ON_WM_KEYDOWN()
-	ON_COMMAND(ID_GRAPH_SAVEASBITMAP, OnGraphSaveAsBitmap)
-	ON_COMMAND(ID_FILE_EQUATIONSOLVER, OnFileEquationSolver)
-	ON_COMMAND(ID_2DGRAPH_ANALYSIS_INTERSECTIONOF2EQUATIONS, On2DGraphAnalysisIntersectionof2equations)
-	ON_COMMAND(ID_2DGRAPH_ANALYSIS_INTERCEPTS, On2DGraphAnalysisIntercepts)
-	ON_UPDATE_COMMAND_UI(ID_2DGRAPH_ANALYSIS_INTERCEPTS, OnUpdate2dgraphAnalysisIntercepts)
-	ON_UPDATE_COMMAND_UI(ID_2DGRAPH_ANALYSIS_INTERSECTIONOF2EQUATIONS, OnUpdate2dgraphAnalysisIntersectionof2equations)
-	ON_COMMAND(ID_ANALYSIS_EQ_MINMAX, OnAnalysisEqMinmax)
-	ON_UPDATE_COMMAND_UI(ID_ANALYSIS_EQ_MINMAX, OnUpdateAnalysisEqMinmax)
-	ON_COMMAND(ID_FILE_SAVEOUTPUT, OnFileSaveOutput)
-	ON_COMMAND(ID_OPTIONS_OUTPUTFONTSETTINGS_BASE, OnOptionsOutputfontsettingsBase)
-	ON_COMMAND(ID_OPTIONS_OUTPUTFONTSETTINGS_DETAILEDOUTPUT, OnOptionsOutputfontsettingsDetailedoutput)
-	ON_COMMAND(ID_QUIT_SCRIPT, OnQuitScript)
+	ON_COMMAND(ID_GRAPH_SAVEASBITMAP, &CGrphCalcDlg::OnGraphSaveAsBitmap)
+	ON_COMMAND(ID_FILE_EQUATIONSOLVER, &CGrphCalcDlg::OnFileEquationSolver)
+	ON_COMMAND(ID_2DGRAPH_ANALYSIS_INTERSECTIONOF2EQUATIONS, &CGrphCalcDlg::On2DGraphAnalysisIntersectionof2equations)
+	ON_COMMAND(ID_2DGRAPH_ANALYSIS_INTERCEPTS, &CGrphCalcDlg::On2DGraphAnalysisIntercepts)
+	ON_UPDATE_COMMAND_UI(ID_2DGRAPH_ANALYSIS_INTERCEPTS, &CGrphCalcDlg::OnUpdate2dgraphAnalysisIntercepts)
+	ON_UPDATE_COMMAND_UI(ID_2DGRAPH_ANALYSIS_INTERSECTIONOF2EQUATIONS, &CGrphCalcDlg::OnUpdate2dgraphAnalysisIntersectionof2equations)
+	ON_COMMAND(ID_ANALYSIS_EQ_MINMAX, &CGrphCalcDlg::OnAnalysisEqMinmax)
+	ON_UPDATE_COMMAND_UI(ID_ANALYSIS_EQ_MINMAX, &CGrphCalcDlg::OnUpdateAnalysisEqMinmax)
+	ON_COMMAND(ID_FILE_SAVEOUTPUT, &CGrphCalcDlg::OnFileSaveOutput)
+	ON_COMMAND(ID_OPTIONS_OUTPUTFONTSETTINGS_BASE, &CGrphCalcDlg::OnOptionsOutputfontsettingsBase)
+	ON_COMMAND(ID_OPTIONS_OUTPUTFONTSETTINGS_DETAILEDOUTPUT, &CGrphCalcDlg::OnOptionsOutputfontsettingsDetailedoutput)
+	ON_COMMAND(ID_QUIT_SCRIPT, &CGrphCalcDlg::OnQuitScript)
 	ON_WM_CHAR()
-	ON_COMMAND(ID_2DGRAPH_ANALYSIS_TABLE, On2DGraphAnalysisTable)
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_COPYGRAPH, OnUpdate2DGraphCopy)
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_SAVEASBITMAP, OnUpdate2DGraphSaveAsBitmap)
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_PRINT, OnUpdate2DGraphPrint)
-	ON_UPDATE_COMMAND_UI(ID_FILE_EQUATIONSOLVER, OnUpdateFileEquationsolver)
-	ON_UPDATE_COMMAND_UI(ID_FILE_RUNSCRIPT, OnUpdateFileRunscript)
-	ON_UPDATE_COMMAND_UI(ID_FILE_SAVESCRIPT, OnUpdateFileSavescript)
-	ON_COMMAND(ID_ANALYSIS_NSLIDER, On2DGraphAnalysisNslider)
-	ON_COMMAND(ID_VIEW_2D_INFOBAR, On2DGraphInfobar)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_2D_INFOBAR, OnUpdate2DGraphIInfobar)
-	ON_COMMAND(ID_VIEW_2D_TOOLBAR, On2DGraphToolbar)
-	ON_UPDATE_COMMAND_UI(ID_VIEW_2D_TOOLBAR, OnUpdate2DGraphToolbar)
-	ON_COMMAND(ID_ANIMATION_SCRIPT, On2DGraphAnimationScript)
-	ON_UPDATE_COMMAND_UI(ID_ANIMATION_SCRIPT, OnUpdate2DGraphAnimationScript)
-	ON_UPDATE_COMMAND_UI(ID_ANALYSIS_NSLIDER, OnUpdate2DGraphNSlider)
+	ON_COMMAND(ID_2DGRAPH_ANALYSIS_TABLE, &CGrphCalcDlg::On2DGraphAnalysisTable)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_COPYGRAPH, &CGrphCalcDlg::OnUpdate2DGraphCopy)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_SAVEASBITMAP, &CGrphCalcDlg::OnUpdate2DGraphSaveAsBitmap)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_PRINT, &CGrphCalcDlg::OnUpdate2DGraphPrint)
+	ON_UPDATE_COMMAND_UI(ID_FILE_EQUATIONSOLVER, &CGrphCalcDlg::OnUpdateFileEquationsolver)
+	ON_UPDATE_COMMAND_UI(ID_FILE_RUNSCRIPT, &CGrphCalcDlg::OnUpdateFileRunscript)
+	ON_UPDATE_COMMAND_UI(ID_FILE_SAVESCRIPT, &CGrphCalcDlg::OnUpdateFileSavescript)
+	ON_COMMAND(ID_ANALYSIS_NSLIDER, &CGrphCalcDlg::On2DGraphAnalysisNslider)
+	ON_COMMAND(ID_VIEW_2D_INFOBAR, &CGrphCalcDlg::On2DGraphInfobar)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_2D_INFOBAR, &CGrphCalcDlg::OnUpdate2DGraphIInfobar)
+	ON_COMMAND(ID_VIEW_2D_TOOLBAR, &CGrphCalcDlg::On2DGraphToolbar)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_2D_TOOLBAR, &CGrphCalcDlg::OnUpdate2DGraphToolbar)
+	ON_COMMAND(ID_ANIMATION_SCRIPT, &CGrphCalcDlg::On2DGraphAnimationScript)
+	ON_UPDATE_COMMAND_UI(ID_ANIMATION_SCRIPT, &CGrphCalcDlg::OnUpdate2DGraphAnimationScript)
+	ON_UPDATE_COMMAND_UI(ID_ANALYSIS_NSLIDER, &CGrphCalcDlg::OnUpdate2DGraphNSlider)
 	ON_WM_RBUTTONDOWN()
-	ON_MESSAGE(WM_SETFULLWINDOW, OnSetFullWindow)
-	ON_UPDATE_COMMAND_UI(ID_2DGRAPH_ANALYSIS_TABLE, OnUpdate2dgraphAnalysisTable)
+	ON_MESSAGE(WM_SETFULLWINDOW, &CGrphCalcDlg::OnSetFullWindow)
+	ON_UPDATE_COMMAND_UI(ID_2DGRAPH_ANALYSIS_TABLE, &CGrphCalcDlg::OnUpdate2dgraphAnalysisTable)
 	//}}AFX_MSG_MAP
-	ON_COMMAND_RANGE(ID_POWER_1, ID_POWER_9, Power)
-	ON_COMMAND_RANGE(ID_LN_1, ID_LN_2, NaturalLN)
-	ON_COMMAND_RANGE(ID_EE_1, ID_EE_2, EE)
-	ON_COMMAND_RANGE(ID_SIN_1, ID_SIN_4, Sin)
-	ON_COMMAND_RANGE(ID_COS_1, ID_COS_4, Cos)
-	ON_COMMAND_RANGE(ID_TAN_1, ID_TAN_4, Tan)
-	ON_COMMAND_RANGE(ID_CLEAR_1, ID_CLEAR_ALL, Clear)
-	ON_COMMAND_RANGE(ID_VAR_X, ID_VAR_R, Var)
-	ON_COMMAND_RANGE(ID_LOG_1, ID_LOG_3, Log)
-	ON_COMMAND_RANGE(ID_R_1, ID_R_8, RootsMenu)
-	ON_COMMAND_RANGE(conv_start, conv_end, OnConvertMenu)
-	ON_COMMAND_RANGE(cons_start, cons_end, OnConstantMenu)
-	ON_COMMAND_RANGE(ID_BASE_2, ID_BASE_HELP, Base)
-	ON_COMMAND_RANGE(ID_PALETES_STATS, ID_PALETES_LETTERS, OnAltMenu)
-	ON_COMMAND_RANGE(ID_CONVER_BASE_2, ID_CONVER_BASE_36, OnConvertBaseMenu)
-	ON_COMMAND_RANGE(ID_GRAPH_EQUATIONS, ID_OPTIONS_GRAPH, OnOptionsGraph)
+	ON_COMMAND_RANGE(ID_POWER_1, ID_POWER_9, &CGrphCalcDlg::Power)
+	ON_COMMAND_RANGE(ID_LN_1, ID_LN_2, &CGrphCalcDlg::NaturalLN)
+	ON_COMMAND_RANGE(ID_EE_1, ID_EE_2, &CGrphCalcDlg::EE)
+	ON_COMMAND_RANGE(ID_SIN_1, ID_SIN_4, &CGrphCalcDlg::Sin)
+	ON_COMMAND_RANGE(ID_COS_1, ID_COS_4, &CGrphCalcDlg::Cos)
+	ON_COMMAND_RANGE(ID_TAN_1, ID_TAN_4, &CGrphCalcDlg::Tan)
+	ON_COMMAND_RANGE(ID_CLEAR_1, ID_CLEAR_ALL, &CGrphCalcDlg::Clear)
+	ON_COMMAND_RANGE(ID_VAR_X, ID_VAR_R, &CGrphCalcDlg::Var)
+	ON_COMMAND_RANGE(ID_LOG_1, ID_LOG_3, &CGrphCalcDlg::Log)
+	ON_COMMAND_RANGE(ID_R_1, ID_R_8, &CGrphCalcDlg::RootsMenu)
+	ON_COMMAND_RANGE(conv_start, conv_end, &CGrphCalcDlg::OnConvertMenu)
+	ON_COMMAND_RANGE(cons_start, cons_end, &CGrphCalcDlg::OnConstantMenu)
+	ON_COMMAND_RANGE(ID_BASE_2, ID_BASE_HELP, &CGrphCalcDlg::Base)
+	ON_COMMAND_RANGE(ID_PALETES_STATS, ID_PALETES_LETTERS, &CGrphCalcDlg::OnAltMenu)
+	ON_COMMAND_RANGE(ID_CONVER_BASE_2, ID_CONVER_BASE_36, &CGrphCalcDlg::OnConvertBaseMenu)
+	ON_COMMAND_RANGE(ID_GRAPH_EQUATIONS, ID_OPTIONS_GRAPH, &CGrphCalcDlg::OnOptionsGraph)
 
-	ON_UPDATE_COMMAND_UI(ID_VIEW_FULLSCREEN, OnUpdateViewFullscreen)
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_GRAPHTRACE, OnUpdateGraphGraphtrace)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_PALETES_STATS, ID_PALETES_LETTERS, OnUpdateAltMenu)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_BASE_2, ID_BASE_36, OnUpdateBaseMenu)
+	ON_UPDATE_COMMAND_UI(ID_VIEW_FULLSCREEN, &CGrphCalcDlg::OnUpdateViewFullscreen)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_GRAPHTRACE, &CGrphCalcDlg::OnUpdateGraphGraphtrace)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_PALETES_STATS, ID_PALETES_LETTERS, &CGrphCalcDlg::OnUpdateAltMenu)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_BASE_2, ID_BASE_36, &CGrphCalcDlg::OnUpdateBaseMenu)
 
-	ON_COMMAND(ID_3DGRAPH_COPYGRAPH, OnGraphCopygraph)
-	ON_COMMAND_RANGE(ID_3DGRAPH_SAVEASBITMAP, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, On3DCommand)
-	ON_UPDATE_COMMAND_UI_RANGE(ID_3DGRAPH_AUTOROTATE_ALLAXIS, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, OnUpdate3DAutoRotate)
+	ON_COMMAND(ID_3DGRAPH_COPYGRAPH, &CGrphCalcDlg::OnGraphCopygraph)
+	ON_COMMAND_RANGE(ID_3DGRAPH_SAVEASBITMAP, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, &CGrphCalcDlg::On3DCommand)
+	ON_UPDATE_COMMAND_UI_RANGE(ID_3DGRAPH_AUTOROTATE_ALLAXIS, ID_3DGRAPH_AUTOROTATE_DECREASESPEED, &CGrphCalcDlg::OnUpdate3DAutoRotate)
 
-	ON_COMMAND_RANGE(script_start, script_end, OnScriptLibraryMenu)
-	ON_COMMAND_RANGE(ans_history_start, ans_history_end, OnAnswerHistoryMenu)
+	ON_COMMAND_RANGE(script_start, script_end, &CGrphCalcDlg::OnScriptLibraryMenu)
+	ON_COMMAND_RANGE(ans_history_start, ans_history_end, &CGrphCalcDlg::OnAnswerHistoryMenu)
 
 	//ON_UPDATE_COMMAND_UI_RANGE(ID_3DGRAPH_COPYGRAPH, ID_3DGRAPH_EXPORTTODFX, OnUpdate3D)
 
@@ -1216,19 +1216,19 @@ void CGrphCalcDlg::FormulaInsertion(CString value)
 	cons.m_Calculator = &m_Calculator;
 
 	if(cons.DoModal() == IDOK){
-		::fstream file("constants.dat", ios::in, filebuf::sh_none);
-		::fstream tfile("temp", ios::out, filebuf::sh_none);
+		std::fstream file("constants.dat", std::ios::in, _SH_DENYRW);
+		std::fstream tfile("temp", std::ios::out, _SH_DENYRW);
 		CString sline;
 		char *cline = new char[50];
 		char nl('\n');
 
-		file.getline(cline, 50, '\n');
+		GCGetLine(file, cline, 50, '\n');
 		sline = cline;
 		tfile.write(sline, sline.GetLength());
 		tfile.write(&nl, 1);
 
 		while(sline != cons.m_Category && !file.eof()){
-			file.getline(cline, 50, '\n');
+			GCGetLine(file, cline, 50, '\n');
 			sline = cline;
 			tfile.write(sline, sline.GetLength());
 			tfile.write(&nl, 1);
@@ -1246,7 +1246,7 @@ void CGrphCalcDlg::FormulaInsertion(CString value)
 		tfile.write(&nl, 1);
 
 		while(!file.eof()){
-			file.getline(cline, 50, '\n');
+			GCGetLine(file, cline, 50, '\n');
 			sline = cline;
 			tfile.write(sline, sline.GetLength());
 			tfile.write(&nl, 1);
@@ -1290,19 +1290,19 @@ void CGrphCalcDlg::FormulaInsertion(CString value)
 	unit.m_Calculator = &m_Calculator;
 
 	if(unit.DoModal() == IDOK){
-		::fstream file("units.dat", ios::in, filebuf::sh_none);
-		::fstream tfile("temp", ios::out, filebuf::sh_none);
+		std::fstream file("units.dat", std::ios::in, _SH_DENYRW);
+		std::fstream tfile("temp", std::ios::out, _SH_DENYRW);
 		CString sline;
 		char *cline = new char[50];
 		char nl('\n');
 
-		file.getline(cline, 50, '\n');
+		GCGetLine(file, cline, 50, '\n');
 		sline = cline;
 		tfile.write(sline, sline.GetLength());
 		tfile.write(&nl, 1);
 
 		while(sline != unit.m_Category && !file.eof()){
-			file.getline(cline, 50, '\n');
+			GCGetLine(file, cline, 50, '\n');
 			sline = cline;
 			tfile.write(sline, sline.GetLength());
 			tfile.write(&nl, 1);
@@ -1332,7 +1332,7 @@ void CGrphCalcDlg::FormulaInsertion(CString value)
 		}
 		else{
 			for(int j = 0; j < 5; ++j){
-				file.getline(cline, 50, '\n');
+				GCGetLine(file, cline, 50, '\n');
 				sline = cline;
 				tfile.write(sline, sline.GetLength());
 				tfile.write(&nl, 1);
@@ -1347,7 +1347,7 @@ void CGrphCalcDlg::FormulaInsertion(CString value)
 		tfile.write(&nl, 1);
 
 		while(!file.eof()){
-			file.getline(cline, 50, '\n');
+			GCGetLine(file, cline, 50, '\n');
 			sline = cline;
 			tfile.write(sline, sline.GetLength());
 			tfile.write(&nl, 1);
@@ -1388,7 +1388,7 @@ void CGrphCalcDlg::FormulaInsertion(CString value)
 /*********************************************************/
 void CGrphCalcDlg::OnHelp()
 {
-	HtmlHelp(NULL, g_strApplicationDirectory + "\\grphcalc.chm", HH_DISPLAY_TOPIC, 0);
+	::HtmlHelp(NULL, g_strApplicationDirectory + "\\grphcalc.chm", HH_DISPLAY_TOPIC, 0);
 }
 
 /*********************************************************/
@@ -1800,16 +1800,16 @@ SRGBString CGrphCalcDlg::GetRGBString(CString r, CString g, CString b)
 	return t;
 }
 
-CString CGrphCalcDlg::GetLine(::ifstream *infile)
+CString CGrphCalcDlg::GetLine(std::ifstream *infile)
 {
 	CString CSline;
 	char *cline = new char[200];
-	infile->getline(cline, 200, '\n');
+	GCGetLine(*infile, cline, 200, '\n');
 	CSline = (LPCTSTR)cline;
 	CSline.TrimLeft();
 	CSline.TrimRight();
 
-	delete cline;
+	delete[] cline;
 	return CSline;
 }
 
@@ -2115,9 +2115,9 @@ void CGrphCalcDlg::LoadSettings()
 	in c:\
 	*/
 	bool old_exists(true);
-	::ifstream infile;
-	infile.open("C:\\graphcalc.ini", ios::nocreate);
-	if (infile.rdstate() == ios::failbit) {
+	std::ifstream infile;
+	infile.open("C:\\graphcalc.ini");
+	if (infile.rdstate() == std::ios::failbit) {
 		old_exists = false;
 		dir = g_strApplicationDirectory + "\\graphcalc.ini"; // file not found, get default dir file
 	}
@@ -2172,11 +2172,11 @@ void CGrphCalcDlg::LoadSettings()
 
 void CGrphCalcDlg::TestFile()
 {
-	::ofstream ofile;
-	ofile.open("C:\\GC Test Results.txt", ios::trunc, filebuf::openprot);
+	std::ofstream ofile;
+	ofile.open("C:\\GC Test Results.txt", std::ios::out | std::ios::trunc);
 	ofile.close();
 
-	::ifstream infile;
+	std::ifstream infile;
 	CString CSline;
 	int cons(0);
 
@@ -2184,7 +2184,7 @@ void CGrphCalcDlg::TestFile()
 	infile.open("C:\\GCtester.txt");
 
 	while (!infile.eof()) {
-		infile.getline(cline, 100, '\n');
+		GCGetLine(infile, cline, 100, '\n');
 		CSline = (LPCTSTR)cline;
 		CSline.TrimLeft();
 		CSline.TrimRight();
@@ -2192,7 +2192,7 @@ void CGrphCalcDlg::TestFile()
 		m_OutputV.OnEnter(CSline, m_Calculator, &m_FormulaCtrl);
 	}
 
-	delete cline;
+	delete[] cline;
 	infile.close();
 }
 
@@ -2271,7 +2271,8 @@ void CGrphCalcDlg::SetTab(CString val) {
 		bool first(true);
 		int index(-1);
 
-		for (int i = 0; i < MAXTABS; ++i) {
+		int i;
+		for (i = 0; i < MAXTABS; ++i) {
 			if (m_ActiveGraphView[i]) {
 				if (first) {
 					first = false;
@@ -2289,7 +2290,7 @@ void CGrphCalcDlg::SetTab(CString val) {
 						m_view.SetActivePage(&m_GraphViewList[i]);
 						break;
 					}
-				delete name;
+				delete[] name;
 			}
 		}
 
@@ -2416,7 +2417,8 @@ void CGrphCalcDlg::RemoveGraphTab(CString tab)
 	if (tab.IsEmpty())
 		OnGraphRemovegraphtab();
 	else {
-		for (int i = 0; i < MAXTABS; ++i) {
+		int i;
+		for (i = 0; i < MAXTABS; ++i) {
 			if (m_ActiveGraphView[i]) {
 				if (first) {
 					first = false;
@@ -2435,7 +2437,7 @@ void CGrphCalcDlg::RemoveGraphTab(CString tab)
 						OnGraphRemovegraphtab();
 						break;
 					}
-				delete name;
+				delete[] name;
 			}
 		}
 
@@ -2448,7 +2450,8 @@ void CGrphCalcDlg::RemoveGraphTab(CString tab)
 
 void CGrphCalcDlg::RenameGraphTab(CString val)
 {
-	for (int i = 0; i < MAXTABS; ++i) {
+	int i;
+	for (i = 0; i < MAXTABS; ++i) {
 		if (m_view.GetActivePage() == &m_GraphViewList[i])
 			break;
 	}
@@ -2588,10 +2591,10 @@ void CGrphCalcDlg::OnQuitScript()
 // returns true if valid script, false otherwise
 bool CGrphCalcDlg::ParseScript(CString filenameS, CArray<CString, CString> *commands)
 {
-	::ifstream infile;
-	infile.open(filenameS, ios::nocreate);
+	std::ifstream infile;
+	infile.open(filenameS);
 
-	if (infile.rdstate() == ios::failbit) {
+	if (infile.rdstate() == std::ios::failbit) {
 		AfxMessageBox("Error opening script: " + filenameS, MB_OK | MB_ICONEXCLAMATION, 0);
 		return false;
 	}
@@ -2605,17 +2608,17 @@ bool CGrphCalcDlg::ParseScript(CString filenameS, CArray<CString, CString> *comm
 	// read in all commands
 	while (!infile.eof()) {
 		char *cline = new char[2048];
-		infile.getline(cline, 2048, '\n');
+		GCGetLine(infile, cline, 2048, '\n');
 		++line;
 
-		if (infile.rdstate() == ios::failbit) {
+		if (infile.rdstate() == std::ios::failbit) {
 			AfxMessageBox("Error reading script: " + filenameS + ".  The file either does not exist, is locked, or may be damaged", MB_OK | MB_ICONEXCLAMATION, 0);
-			delete cline;
+			delete[] cline;
 			return false;
 		}
 
 		CString temp = (LPCTSTR)cline;
-		delete cline;
+		delete[] cline;
 
 		temp.TrimRight();
 		temp.TrimLeft();
@@ -2909,7 +2912,7 @@ bool CGrphCalcDlg::Is3DGraphActive()
 
 void CGrphCalcDlg::SaveExpressionHistory()
 {
-	::ofstream outfile;
+	std::ofstream outfile;
 	CString CSline;
 
 	chdir(g_strApplicationDirectory);
@@ -2929,14 +2932,14 @@ void CGrphCalcDlg::SaveExpressionHistory()
 
 void CGrphCalcDlg::LoadExpressionHistory()
 {
-	::ifstream infile;
+	std::ifstream infile;
 	CArray<CString, CString> list;
 	CString expr;
 
 	chdir(g_strApplicationDirectory);
-	infile.open("expression_history.gcs", ios::nocreate);
+	infile.open("expression_history.gcs");
 
-	if (infile.rdstate() == ios::failbit) {
+	if (infile.rdstate() == std::ios::failbit) {
 		AfxMessageBox("Error opening expression_history.gcs", MB_OK | MB_ICONEXCLAMATION, 0);
 		return;
 	}
@@ -2944,7 +2947,7 @@ void CGrphCalcDlg::LoadExpressionHistory()
 	char *line = new char[1000];
 
 	while (!infile.eof()) {
-		infile.getline(line, 1000, '\n');
+		GCGetLine(infile, line, 1000, '\n');
 		expr = (LPCTSTR)line;
 		expr.TrimLeft();
 		expr.TrimRight();
@@ -2953,7 +2956,7 @@ void CGrphCalcDlg::LoadExpressionHistory()
 			list.Add(expr);
 	}
 
-	delete line;
+	delete[] line;
 	infile.close();
 
 	for (int j(0); j < list.GetSize(); ++j)
@@ -2962,7 +2965,7 @@ void CGrphCalcDlg::LoadExpressionHistory()
 
 void CGrphCalcDlg::SaveAnswerHistory()
 {
-	::ofstream outfile;
+	std::ofstream outfile;
 	CString CSline;
 
 	chdir(g_strApplicationDirectory);
@@ -2983,14 +2986,14 @@ void CGrphCalcDlg::SaveAnswerHistory()
 
 void CGrphCalcDlg::LoadAnswerHistory()
 {
-	::ifstream infile;
+	std::ifstream infile;
 	CArray<CString, CString> list;
 	CString expr;
 
 	chdir(g_strApplicationDirectory);
-	infile.open("answer_history.gcs", ios::nocreate);
+	infile.open("answer_history.gcs");
 
-	if (infile.rdstate() == ios::failbit) {
+	if (infile.rdstate() == std::ios::failbit) {
 		//AfxMessageBox("Error opening answer_history.gcs", MB_OK | MB_ICONEXCLAMATION, 0);
 		return;
 	}
@@ -2998,7 +3001,7 @@ void CGrphCalcDlg::LoadAnswerHistory()
 	char *line = new char[1000];
 
 	while (!infile.eof()) {
-		infile.getline(line, 1000, '\n');
+		GCGetLine(infile, line, 1000, '\n');
 		expr = (LPCTSTR)line;
 		expr.TrimLeft();
 		expr.TrimRight();
@@ -3007,7 +3010,7 @@ void CGrphCalcDlg::LoadAnswerHistory()
 			list.Add(expr);
 	}
 
-	delete line;
+	delete[] line;
 	infile.close();
 
 	for (int j(0); j < list.GetSize(); ++j)
@@ -3419,13 +3422,13 @@ void CGrphCalcDlg::CreateScriptMenu(int &pos, CMenu &menu, ScriptsT &scripts)
 	for (int j = 0; j < num_entries; ++j) {
 		// get name of script
 		CString script_name;
-		::ifstream infile;
+		std::ifstream infile;
 		CString CSline;
 
-		infile.open(scripts.name + "\\" + scripts.entries[j], ios::nocreate);
+		infile.open(scripts.name + "\\" + scripts.entries[j]);
 
 		char *cline = new char[100];
-		infile.getline(cline, 1000, '\n');
+		GCGetLine(infile, cline, 1000, '\n');
 		CSline = (LPCTSTR)cline;
 		CSline.TrimLeft();
 
@@ -3435,7 +3438,7 @@ void CGrphCalcDlg::CreateScriptMenu(int &pos, CMenu &menu, ScriptsT &scripts)
 			script_name = scripts.entries[j];
 
 		infile.close();
-		delete cline;
+		delete[] cline;
 
 		// set menu item
 		pSub.AppendMenu(MF_STRING, pos, script_name);
@@ -3446,7 +3449,7 @@ void CGrphCalcDlg::CreateScriptMenu(int &pos, CMenu &menu, ScriptsT &scripts)
 		CString pop_name;
 		pop_name = scripts.name.Right(scripts.name.GetLength() - scripts.name.ReverseFind('\\') - 1);
 
-		menu.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT)pSub.m_hMenu, pop_name);
+		menu.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT_PTR)pSub.m_hMenu, pop_name);
 		pSub.Detach();
 	}
 }
@@ -3457,7 +3460,7 @@ void CGrphCalcDlg::AddScriptLibraryMenu(CMenu &menu, int tools_position)
 		return;
 
 	CMenu *tools = menu.GetSubMenu(tools_position);
-	tools->InsertMenu(1, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)m_MenuScripts.GetSubMenu(0)->m_hMenu, "Script Library");
+	tools->InsertMenu(1, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)m_MenuScripts.GetSubMenu(0)->m_hMenu, "Script Library");
 	tools->Detach();
 }
 

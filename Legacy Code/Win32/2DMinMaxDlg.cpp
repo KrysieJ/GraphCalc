@@ -40,12 +40,12 @@ void C2DMinMaxDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C2DMinMaxDlg, CDialog)
 	//{{AFX_MSG_MAP(C2DMinMaxDlg)
-	ON_BN_CLICKED(ID_SOLVE, OnSolve)
-	ON_CBN_SELCHANGE(IDC_EQUATION_PICKER, OnSelchangeEquationPicker)
-	ON_EN_KILLFOCUS(IDC_MIN, OnKillfocusMin)
-	ON_EN_KILLFOCUS(IDC_MAX, OnKillfocusMax)
-	ON_BN_CLICKED(IDC_CENTER_GRAPH, OnCenterGraph)
-	ON_BN_CLICKED(IDC_Help, OnHelp)
+	ON_BN_CLICKED(ID_SOLVE, &C2DMinMaxDlg::OnSolve)
+	ON_CBN_SELCHANGE(IDC_EQUATION_PICKER, &C2DMinMaxDlg::OnSelchangeEquationPicker)
+	ON_EN_KILLFOCUS(IDC_MIN, &C2DMinMaxDlg::OnKillfocusMin)
+	ON_EN_KILLFOCUS(IDC_MAX, &C2DMinMaxDlg::OnKillfocusMax)
+	ON_BN_CLICKED(IDC_CENTER_GRAPH, &C2DMinMaxDlg::OnCenterGraph)
+	ON_BN_CLICKED(IDC_Help, &C2DMinMaxDlg::OnHelp)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

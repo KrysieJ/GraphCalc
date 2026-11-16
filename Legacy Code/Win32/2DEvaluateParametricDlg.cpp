@@ -34,8 +34,8 @@ void C2DEvaluateParametricDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C2DEvaluateParametricDlg, CDialog)
 	//{{AFX_MSG_MAP(C2DEvaluateParametricDlg)
-	ON_CBN_SELCHANGE(IDC_EQ, OnSelchangeEq)
-	ON_EN_CHANGE(IDC_T, OnChangeT)
+	ON_CBN_SELCHANGE(IDC_EQ, &C2DEvaluateParametricDlg::OnSelchangeEq)
+	ON_EN_CHANGE(IDC_T, &C2DEvaluateParametricDlg::OnChangeT)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

@@ -235,7 +235,7 @@ void CGraphView::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CGraphView, CPropertyPage)
-	ON_MESSAGE(WM_2DGRAPH_N_SLIDER_CLOSING, On2DNSliderClosing)
+	ON_MESSAGE(WM_2DGRAPH_N_SLIDER_CLOSING, &CGraphView::On2DNSliderClosing)
 	//{{AFX_MSG_MAP(CGraphView)
 	ON_WM_PAINT()
 	ON_WM_MOUSEMOVE()
@@ -244,33 +244,33 @@ BEGIN_MESSAGE_MAP(CGraphView, CPropertyPage)
 	ON_WM_KEYDOWN()
 	ON_WM_CONTEXTMENU()
 	ON_WM_MOUSEWHEEL()
-	ON_COMMAND(ID_GRAPH_GRAPHTRACE, ToggleTrace)
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_GRAPHTRACE, OnUpdateGraphGraphTrace)
+	ON_COMMAND(ID_GRAPH_GRAPHTRACE, &CGraphView::ToggleTrace)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_GRAPHTRACE, &CGraphView::OnUpdateGraphGraphTrace)
 	ON_WM_LBUTTONDBLCLK()
-	ON_UPDATE_COMMAND_UI(ID_GRAPH_FINDAREA, OnUpdateGraphFindarea)
+	ON_UPDATE_COMMAND_UI(ID_GRAPH_FINDAREA, &CGraphView::OnUpdateGraphFindarea)
 	ON_WM_SIZE()
 	ON_WM_GETDLGCODE()
 	ON_WM_CAPTURECHANGED()
 	ON_WM_INITMENUPOPUP()
 	ON_WM_CREATE()
-	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
-	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, &CGraphView::OnToolTipText)
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, &CGraphView::OnToolTipText)
 #ifdef GRAPH2D_INFOBAR
-	ON_BN_CLICKED(IDC_EQ_ON_1, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_2, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_3, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_4, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_5, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_6, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_7, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_8, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_9, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_EQ_ON_10, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_1, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_2, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_3, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_4, OnInfoBarEqOn)
-	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_5, OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_1, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_2, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_3, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_4, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_5, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_6, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_7, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_8, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_9, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_EQ_ON_10, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_1, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_2, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_3, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_4, &CGraphView::OnInfoBarEqOn)
+	ON_BN_CLICKED(IDC_PARAMETRIC_EQ_5, &CGraphView::OnInfoBarEqOn)
 #endif
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -1374,7 +1374,7 @@ void CGraphView::OnContextMenu(CWnd* pWnd, CPoint point)
 		graph.CreatePopupMenu();
 		CMenu PopUp2DGraph;
 		PopUp2DGraph.LoadMenu(IDR_2DGRAPH);
-		graph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)PopUp2DGraph.m_hMenu, "2D Graph");
+		graph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)PopUp2DGraph.m_hMenu, "2D Graph");
 		PopUp2DGraph.Detach();
 
 		graph.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,
@@ -3050,7 +3050,8 @@ void CGraphView::SetAllEquationState(bool val)
 		return;
 	}
 
-	for (int i = 0; i < MAX_EQUATIONS; ++i)
+	int i;
+	for (i = 0; i < MAX_EQUATIONS; ++i)
 		m_Equations[i].disp = val;
 
 	for (i = 0; i < MAX_EQUATIONS; ++i)
@@ -3368,8 +3369,8 @@ BOOL CGraphView::OnInitDialog()
 	CGrphCalcDlg* pDlg = (CGrphCalcDlg*)STATIC_DOWNCAST(CDialog, AfxGetMainWnd());
 	pDlg->AddScriptLibraryMenu(m_Menu2DGraph, 3);
 
-	m_Menu2DGraph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)PopUp2DGraph.m_hMenu, "2D Graph");
-	m_Menu2DGraph.InsertMenu(6, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT)PopUpView.m_hMenu, "View");
+	m_Menu2DGraph.InsertMenu(3, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)PopUp2DGraph.m_hMenu, "2D Graph");
+	m_Menu2DGraph.InsertMenu(6, MF_BYPOSITION | MF_POPUP | MF_ENABLED, (UINT_PTR)PopUpView.m_hMenu, "View");
 
 	PopUp2DGraph.Detach();
 	PopUpView.Detach();
@@ -3516,9 +3517,10 @@ void CGraphView::OnAnalysisNslider()
 	}
 }
 
-void CGraphView::On2DNSliderClosing(WPARAM wParam, LPARAM lParam)
+LRESULT CGraphView::On2DNSliderClosing(WPARAM wParam, LPARAM lParam)
 {
 	m_fNSliderOn = false;
+	return 0;
 }
 
 int CGraphView::ToolbarHeight()
@@ -3663,7 +3665,7 @@ void CGraphView::CreateAnimationRealTimeScript(CString strFile, double nMin, dou
 {
 	CString str, strEq, strBmp, strMin, strMax, strStep, strN;
 	int i;
-	::ofstream outfile;
+	std::ofstream outfile;
 
 	Assert((nStep > 0) && (nMin < nMax));
 	if ((nStep < 0) || (nMin >= nMax))
@@ -3784,7 +3786,7 @@ void CGraphView::CreateAnimationFramesScript(CString strFile, double nMin, doubl
 	CString str, strEq, strBmp, strMin, strMax, strStep, strN, strFileCounter, strFileName, strFrameCount;
 	double n;
 	int i, nFileCounter = 0;
-	::ofstream outfile;
+	std::ofstream outfile;
 
 	Assert(nTimesThrough > 0);
 	Assert((nStep > 0) && (nMin < nMax));
@@ -3900,7 +3902,7 @@ BOOL CGraphView::OnToolTipText(UINT, NMHDR* pNMHDR, LRESULT* pResult)
 	CString cstTipText;
 	CString cstStatusText;
 
-	UINT nID = pNMHDR->idFrom;
+	UINT_PTR nID = pNMHDR->idFrom;
 	if (pNMHDR->code == TTN_NEEDTEXTA && (pTTTA->uFlags & TTF_IDISHWND) ||
 		pNMHDR->code == TTN_NEEDTEXTW && (pTTTW->uFlags & TTF_IDISHWND))
 	{

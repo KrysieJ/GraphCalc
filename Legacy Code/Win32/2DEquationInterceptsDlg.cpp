@@ -43,12 +43,12 @@ void C2DEquationInterceptsDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C2DEquationInterceptsDlg, CDialog)
 	//{{AFX_MSG_MAP(C2DEquationInterceptsDlg)
-	ON_EN_KILLFOCUS(IDC_GUESS, OnKillfocusGuess)
-	ON_BN_CLICKED(ID_SOLVE, OnSolve)
-	ON_CBN_SELCHANGE(IDC_EQUATION_PICKER, OnSelchangeEquationPicker)
-	ON_CBN_DROPDOWN(IDC_EQUATION_PICKER, OnDropdownEquationPicker)
-	ON_BN_CLICKED(IDC_CENTER_GRAPH, OnCenterGraph)
-	ON_BN_CLICKED(IDC_Help, OnHelp)
+	ON_EN_KILLFOCUS(IDC_GUESS, &C2DEquationInterceptsDlg::OnKillfocusGuess)
+	ON_BN_CLICKED(ID_SOLVE, &C2DEquationInterceptsDlg::OnSolve)
+	ON_CBN_SELCHANGE(IDC_EQUATION_PICKER, &C2DEquationInterceptsDlg::OnSelchangeEquationPicker)
+	ON_CBN_DROPDOWN(IDC_EQUATION_PICKER, &C2DEquationInterceptsDlg::OnDropdownEquationPicker)
+	ON_BN_CLICKED(IDC_CENTER_GRAPH, &C2DEquationInterceptsDlg::OnCenterGraph)
+	ON_BN_CLICKED(IDC_Help, &C2DEquationInterceptsDlg::OnHelp)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

@@ -42,7 +42,7 @@ void CGrphCalcDlg::OnContextMenuSubmit(int i, int j, CPoint point)
 			}
 
 			if (num_entries > 0) {
-				m_MenuConstant.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT)pSub.m_hMenu, "User Entered");
+				m_MenuConstant.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT_PTR)pSub.m_hMenu, "User Entered");
 				pSub.Detach();
 			}
 
@@ -568,14 +568,14 @@ void CGrphCalcDlg::CreateConvertMenus()
 			}
 
 			if (num_entries > 0) {
-				pSub.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT)pSubSub.m_hMenu, m_Calculator.m_Categories[i].entries[j].unit + " ->");
+				pSub.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT_PTR)pSubSub.m_hMenu, m_Calculator.m_Categories[i].entries[j].unit + " ->");
 				pSubSub.Detach();
 			}
 			/////////////
 		}
 
 		if (num_entries > 0) {
-			m_MenuConvert.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT)pSub.m_hMenu, m_Calculator.m_Categories[i].name);
+			m_MenuConvert.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT_PTR)pSub.m_hMenu, m_Calculator.m_Categories[i].name);
 			pSub.Detach();
 		}
 	}
@@ -625,7 +625,7 @@ void CGrphCalcDlg::CreateSubConstantMenu(int &pos, CMenu &menu, CArray<ConstCatT
 		}
 
 		if (num_entries > 0 || sub_menu) {
-			menu.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT)pSub.m_hMenu, cons[i].name);
+			menu.AppendMenu(MF_STRING | MF_POPUP | MF_ENABLED, (UINT_PTR)pSub.m_hMenu, cons[i].name);
 			pSub.Detach();
 		}
 	}

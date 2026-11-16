@@ -802,7 +802,8 @@ ErrorT CCalculator::Translate(int stack)
 {
 	/////////// CLEAR STACKS /////////////////////////
 	int count = m_RunTimeStack.GetCount();
-	for (int i = 0; count > i; ++i)
+	int i;
+	for (i = 0; count > i; ++i)
 		m_RunTimeStack.RemoveHead();
 
 	count = m_Stack[stack].GetCount();
@@ -1441,7 +1442,8 @@ void CCalculator::SetRunTimeStack(int stack)
 {
 	// CLEAR STACK ///////////////////////
 	int count = m_RunTimeStack.GetCount();
-	for (int i = 0; count > i; ++i)
+	int i;
+	for (i = 0; count > i; ++i)
 		m_RunTimeStack.RemoveHead();
 
 	count = m_Stack[stack].GetCount();
@@ -1702,42 +1704,42 @@ void CCalculator::ReplaceConversions(CString &formula)
 /*********************************************************/
 void CCalculator::InitConstants()
 {
-	::ifstream infile;
+	std::ifstream infile;
 	CString CSline;
 
 	char *cline = new char[100];
 
-	infile.open("constants.dat", ios::nocreate);
+	infile.open("constants.dat");
 
-	if (infile.rdstate() == ios::failbit)
+	if (infile.rdstate() == std::ios::failbit)
 		return;
 
 	// read in for GROUP
-	infile.getline(cline, 100, '\n');
+	GCGetLine(infile, cline, 100, '\n');
 	CSline = (LPCTSTR)cline;
 	CSline.TrimLeft();
 
 	if (CSline != "*GROUP*") {
-		delete cline;
+		delete[] cline;
 		return; // ERROR
 	}
 
 	InitConstCat(m_Constants, &infile, 1);
 
-	delete cline;
+	delete[] cline;
 
 	infile.close();
 }
 
 /*********************************************************/
 // CCalculator::InitConstCat(CArray<ConstCatT, ConstCatT> &cat,
-//							::ifstream *infile, int level)
+//							std::ifstream *infile, int level)
 // Pre: none
 // Post: m_Constants has values set
 // Return Value: the level that the last group read in is at
 // Intent: to read in constants.dat and parse it for constants
 /*********************************************************/
-int CCalculator::InitConstCat(CArray<ConstCatT, ConstCatT> &cat, ::ifstream *infile, int level)
+int CCalculator::InitConstCat(CArray<ConstCatT, ConstCatT> &cat, std::ifstream *infile, int level)
 {
 	int i(0), stars(0);
 	CString CSline;
@@ -1749,12 +1751,12 @@ int CCalculator::InitConstCat(CArray<ConstCatT, ConstCatT> &cat, ::ifstream *inf
 		cat.SetSize(i + 1, 1);
 
 		// get group name
-		infile->getline(cline, 200, '\n');
+		GCGetLine(*infile, cline, 200, '\n');
 		cat[i].name = (LPCTSTR)cline;
 		cat[i].name.TrimLeft();
 
 		// get the first constant name
-		infile->getline(cline, 200, '\n');
+		GCGetLine(*infile, cline, 200, '\n');
 		CSline = (LPCTSTR)cline;
 		CSline.TrimLeft();
 
@@ -1779,7 +1781,7 @@ int CCalculator::InitConstCat(CArray<ConstCatT, ConstCatT> &cat, ::ifstream *inf
 				ConstantT temp;
 				temp.name = CSline;
 
-				infile->getline(cline, 200, '\n');
+				GCGetLine(*infile, cline, 200, '\n');
 				temp.value = (LPCTSTR)cline;
 				temp.value.TrimLeft();
 
@@ -1787,7 +1789,7 @@ int CCalculator::InitConstCat(CArray<ConstCatT, ConstCatT> &cat, ::ifstream *inf
 			}
 
 			if (!infile->eof() && !new_group) {
-				infile->getline(cline, 200, '\n');
+				GCGetLine(*infile, cline, 200, '\n');
 				CSline = (LPCTSTR)cline;
 				CSline.TrimLeft();
 			}
@@ -1796,12 +1798,12 @@ int CCalculator::InitConstCat(CArray<ConstCatT, ConstCatT> &cat, ::ifstream *inf
 		++i;
 
 		if (stars < level) {
-			delete cline;
+			delete[] cline;
 			return stars;
 		}
 	}
 
-	delete cline;
+	delete[] cline;
 	return -1;
 }
 
@@ -1817,23 +1819,23 @@ void CCalculator::InitUnits()
 {
 	m_Categories.SetSize(20, -1);
 
-	::ifstream infile;
+	std::ifstream infile;
 	CString CSline;
 	int cat(0);
 
 	char *cline = new char[LINE_LENGTH];
-	infile.open("units.dat", ios::nocreate);
+	infile.open("units.dat");
 
-	if (infile.rdstate() == ios::failbit)
+	if (infile.rdstate() == std::ios::failbit)
 		return;
 
 	// read in for Standard
-	infile.getline(cline, 50, '\n');
+	GCGetLine(infile, cline, 50, '\n');
 	CSline = (LPCTSTR)cline;
 	CSline.TrimLeft();
 
 	if (CSline != "****STANDARD****") {
-		delete cline;
+		delete[] cline;
 		return; // ERROR
 	}
 
@@ -1841,37 +1843,37 @@ void CCalculator::InitUnits()
 		m_Categories.SetSize(cat + 1, 1);
 
 		// get category name
-		infile.getline(cline, LINE_LENGTH, '\n');
+		GCGetLine(infile, cline, LINE_LENGTH, '\n');
 		m_Categories[cat].name = (LPCTSTR)cline;
 		m_Categories[cat].name.TrimLeft();
 
 		// get standard_one unit type
-		infile.getline(cline, LINE_LENGTH, '\n');
+		GCGetLine(infile, cline, LINE_LENGTH, '\n');
 		m_Categories[cat].type_one = (LPCTSTR)cline;
 		m_Categories[cat].type_one.TrimLeft();
 
 		// get standard_one unit name
-		infile.getline(cline, LINE_LENGTH, '\n');
+		GCGetLine(infile, cline, LINE_LENGTH, '\n');
 		m_Categories[cat].standard_one = (LPCTSTR)cline;
 		m_Categories[cat].standard_one.TrimLeft();
 
 		// get standard_two unit name
-		infile.getline(cline, LINE_LENGTH, '\n');
+		GCGetLine(infile, cline, LINE_LENGTH, '\n');
 		m_Categories[cat].type_two = (LPCTSTR)cline;
 		m_Categories[cat].type_two.TrimLeft();
 
 		// get standard_two name name
-		infile.getline(cline, LINE_LENGTH, '\n');
+		GCGetLine(infile, cline, LINE_LENGTH, '\n');
 		m_Categories[cat].standard_two = (LPCTSTR)cline;
 		m_Categories[cat].standard_two.TrimLeft();
 
 		// get conversion between types
-		infile.getline(cline, LINE_LENGTH, '\n');
+		GCGetLine(infile, cline, LINE_LENGTH, '\n');
 		m_Categories[cat].conversion = (LPCTSTR)cline;
 		m_Categories[cat].conversion.TrimLeft();
 
 		// get the first unit name
-		infile.getline(cline, LINE_LENGTH, '\n');
+		GCGetLine(infile, cline, LINE_LENGTH, '\n');
 		CSline = (LPCTSTR)cline;
 		CSline.TrimLeft();
 
@@ -1880,19 +1882,19 @@ void CCalculator::InitUnits()
 			tempU.unit = CSline;
 
 			// get unit type
-			infile.getline(cline, LINE_LENGTH, '\n');
+			GCGetLine(infile, cline, LINE_LENGTH, '\n');
 			tempU.type = (LPCTSTR)cline;
 			tempU.type.TrimLeft();
 
 			// get unit value
-			infile.getline(cline, LINE_LENGTH, '\n');
+			GCGetLine(infile, cline, LINE_LENGTH, '\n');
 			tempU.value = (LPCTSTR)cline;
 			tempU.value.TrimLeft();
 
 			m_Categories[cat].entries.Add(tempU);
 
 			if (!infile.eof()) {
-				infile.getline(cline, LINE_LENGTH, '\n');
+				GCGetLine(infile, cline, LINE_LENGTH, '\n');
 				CSline = (LPCTSTR)cline;
 				CSline.TrimLeft();
 			}
@@ -1900,7 +1902,7 @@ void CCalculator::InitUnits()
 		++cat;
 	}
 	infile.close();
-	delete cline;
+	delete[] cline;
 }
 
 /*********************************************************/

@@ -47,11 +47,11 @@ void C2DTableViewDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C2DTableViewDlg, CDialog)
 	//{{AFX_MSG_MAP(C2DTableViewDlg)
-	ON_BN_CLICKED(IDC_UPDATE, OnUpdate)
-	ON_BN_CLICKED(IDC_HELP_BUTTON, OnHelpButton)
+	ON_BN_CLICKED(IDC_UPDATE, &C2DTableViewDlg::OnUpdate)
+	ON_BN_CLICKED(IDC_HELP_BUTTON, &C2DTableViewDlg::OnHelpButton)
 	ON_WM_GETMINMAXINFO()
-	ON_COMMAND(ID_HELP, OnHelp)
-	ON_BN_CLICKED(IDC_EXPORT, OnExport)
+	ON_COMMAND(ID_HELP, &C2DTableViewDlg::OnHelp)
+	ON_BN_CLICKED(IDC_EXPORT, &C2DTableViewDlg::OnExport)
 	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -230,7 +230,7 @@ void C2DTableViewDlg::OnHelp()
 
 void C2DTableViewDlg::ExportToCSV(CString strFile)
 {
-	::ofstream outfile;
+	std::ofstream outfile;
 	CString CSline;
 
 	outfile.open(strFile);

@@ -38,7 +38,7 @@ void CTangentDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CTangentDlg, CDialog)
 	//{{AFX_MSG_MAP(CTangentDlg)
-	ON_CBN_SELCHANGE(IDC_EQ, OnSelchangeEq)
+	ON_CBN_SELCHANGE(IDC_EQ, &CTangentDlg::OnSelchangeEq)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

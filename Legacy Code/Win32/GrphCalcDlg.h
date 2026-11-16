@@ -312,7 +312,7 @@ protected:
 	afx_msg void OnUpdate3DAutoRotate(CCmdUI* pCmdUI);
 	afx_msg void OnScriptLibraryMenu(UINT id);
 	afx_msg void OnAnswerHistoryMenu(UINT id);
-	afx_msg void OnSetFullWindow(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSetFullWindow(WPARAM wParam, LPARAM lParam);
 
 	DECLARE_MESSAGE_MAP()
 
@@ -369,7 +369,7 @@ private:
 	void UpdateMenu(CMenu* pMenu);
 	bool FullTab(int i, int &free_pos);
 
-	CString		GetLine(::ifstream *infile);
+	CString		GetLine(std::ifstream *infile);
 	///////////////////////////////
 
 	// Drawing of Buttons /////////

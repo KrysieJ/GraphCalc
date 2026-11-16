@@ -349,7 +349,8 @@ void CGrphCalcDlg::OnEditPaste() { m_FormulaCtrl.Paste(); }
 void CGrphCalcDlg::OnGraphAddGraphTab()
 {
 	// search for free graph
-	for (int i = 0; i < MAXTABS; ++i)
+	int i;
+	for (i = 0; i < MAXTABS; ++i)
 		if (!m_ActiveGraphView[i]) {
 			break;
 		}
@@ -408,7 +409,8 @@ void CGrphCalcDlg::OnGraphRemovegraphtab()
 		return;
 	}
 
-	for (int i = 0; i < MAXTABS; ++i)
+	int i;
+	for (i = 0; i < MAXTABS; ++i)
 		if (m_view.GetActivePage() == &m_GraphViewList[i]) {
 			m_ActiveGraphView[i] = false;
 			break;
@@ -641,7 +643,8 @@ void CGrphCalcDlg::OnGraphZoomPreviousRange()
 /*********************************************************/
 void CGrphCalcDlg::OnGraphRenametab()
 {
-	for (int i = 0; i < MAXTABS; ++i)
+	int i;
+	for (i = 0; i < MAXTABS; ++i)
 		if (m_view.GetActivePage() == &m_GraphViewList[i])
 			break;
 
@@ -688,7 +691,7 @@ void CGrphCalcDlg::OnViewFullscreen()
 // Return Value: none
 // Intent: to handle menu call
 /*********************************************************/
-void CGrphCalcDlg::OnSetFullWindow(WPARAM wParam, LPARAM lParam)
+LRESULT CGrphCalcDlg::OnSetFullWindow(WPARAM wParam, LPARAM lParam)
 {
 	if (!wParam) {
 		m_FormulaCtrl.ShowWindow(SW_SHOW);
@@ -702,6 +705,7 @@ void CGrphCalcDlg::OnSetFullWindow(WPARAM wParam, LPARAM lParam)
 	CRect client_r;
 	GetClientRect(&client_r);
 	ResizeTabs(CSize(client_r.right, client_r.bottom));
+	return 0;
 }
 
 /*********************************************************/

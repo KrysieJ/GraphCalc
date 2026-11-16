@@ -81,15 +81,15 @@ BEGIN_MESSAGE_MAP(CColourPicker, CButton)
 	//{{AFX_MSG_MAP(CColourPicker)
 	ON_WM_CREATE()
 	//}}AFX_MSG_MAP
-	ON_MESSAGE(CPN_SELENDOK, OnSelEndOK)
-	ON_MESSAGE(CPN_SELENDCANCEL, OnSelEndCancel)
-	ON_MESSAGE(CPN_SELCHANGE, OnSelChange)
+	ON_MESSAGE(CPN_SELENDOK, &CColourPicker::OnSelEndOK)
+	ON_MESSAGE(CPN_SELENDCANCEL, &CColourPicker::OnSelEndCancel)
+	ON_MESSAGE(CPN_SELCHANGE, &CColourPicker::OnSelChange)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CColourPicker message handlers
 
-LONG CColourPicker::OnSelEndOK(UINT lParam, LONG /*wParam*/)
+LRESULT CColourPicker::OnSelEndOK(WPARAM lParam, LPARAM /*wParam*/)
 {
 	COLORREF crNewColour = (COLORREF)lParam;
 	m_bActive = FALSE;
@@ -107,7 +107,7 @@ LONG CColourPicker::OnSelEndOK(UINT lParam, LONG /*wParam*/)
 	return TRUE;
 }
 
-LONG CColourPicker::OnSelEndCancel(UINT lParam, LONG /*wParam*/)
+LRESULT CColourPicker::OnSelEndCancel(WPARAM lParam, LPARAM /*wParam*/)
 {
 	m_bActive = FALSE;
 	SetColour((COLORREF)lParam);
@@ -121,7 +121,7 @@ LONG CColourPicker::OnSelEndCancel(UINT lParam, LONG /*wParam*/)
 	return TRUE;
 }
 
-LONG CColourPicker::OnSelChange(UINT lParam, LONG /*wParam*/)
+LRESULT CColourPicker::OnSelChange(WPARAM lParam, LPARAM /*wParam*/)
 {
 	if (m_bTrackSelection) SetColour((COLORREF)lParam);
 

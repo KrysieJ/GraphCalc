@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "GrphCalc.h"
 #include "SaveScriptDlg.h"
-#include <fstream.h>
+#include <fstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -34,8 +34,8 @@ void CSaveScriptDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CSaveScriptDlg, CDialog)
 	//{{AFX_MSG_MAP(CSaveScriptDlg)
-	ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
-	ON_EN_CHANGE(IDC_FILE, OnChangeFile)
+	ON_BN_CLICKED(IDC_BROWSE, &CSaveScriptDlg::OnBrowse)
+	ON_EN_CHANGE(IDC_FILE, &CSaveScriptDlg::OnChangeFile)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -85,7 +85,7 @@ void CSaveScriptDlg::OnOK()
 {
 	UpdateData();
 
-	::ofstream outfile;
+	std::ofstream outfile;
 
 	outfile.open(m_sFile);
 

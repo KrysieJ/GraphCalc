@@ -2,6 +2,23 @@
 #define GLOBALS_FILE
 
 #include "CCalculator.h"
+#include <fstream>
+#include <share.h>		// _SH_DENYRW
+
+// GCGetLine
+// Replacement for the pre-standard <fstream.h> istream::getline().  The old
+// library never set failbit when a line was longer than the buffer; it
+// returned the first (size - 1) characters and left the rest for the next
+// call.  Standard getline() sets failbit in that case, which would turn every
+// "while (!file.eof())" loop in this code base into an infinite loop.  This
+// wrapper restores the old behaviour so file parsing is unchanged.
+inline std::istream &GCGetLine(std::istream &is, char *buf, int size, char delim = '\n')
+{
+	is.getline(buf, size, delim);
+	if (is.fail() && !is.eof() && is.gcount() == (std::streamsize)(size - 1))
+		is.clear(is.rdstate() & ~std::ios::failbit);
+	return is;
+}
 
 // needed for accelerator keys
 extern HWND    				ghDlg;          // Handle to main dialog box

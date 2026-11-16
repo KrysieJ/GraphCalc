@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "GrphCalc.h"
 #include "OptionsDlg.h"
-#include <fstream.h>
+#include <fstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -28,9 +28,9 @@ void AFXAPI DDV_FileName(CDataExchange* pDX, CString& value, int nIDC, int &scri
 					ok = false;
 				}
 				else {
-					::ifstream ifile(value, ios::nocreate);
+					std::ifstream ifile(value);
 
-					if (ifile.rdstate() == ios::failbit) {
+					if (ifile.rdstate() == std::ios::failbit) {
 						pDX->m_pDlgWnd->MessageBox("Startup script file '" + value + "' does not exist.  Please check the path and file name.");
 						pDX->PrepareEditCtrl(nIDC);
 						pDX->Fail();
@@ -83,10 +83,10 @@ void COptionsDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(COptionsDlg, CDialog)
 	//{{AFX_MSG_MAP(COptionsDlg)
-	ON_BN_CLICKED(IDC_STARTUP_SCRIPT_ENABLED, OnStartupScriptEnabled)
-	ON_BN_CLICKED(IDC_SETTINGS_BROWSE, OnSettingsBrowse)
-	ON_BN_CLICKED(IDC_SAVE_SETTINGS, OnSaveSettings)
-	ON_BN_CLICKED(IDC_SCRIPT_BROWSE, OnScriptBrowse)
+	ON_BN_CLICKED(IDC_STARTUP_SCRIPT_ENABLED, &COptionsDlg::OnStartupScriptEnabled)
+	ON_BN_CLICKED(IDC_SETTINGS_BROWSE, &COptionsDlg::OnSettingsBrowse)
+	ON_BN_CLICKED(IDC_SAVE_SETTINGS, &COptionsDlg::OnSaveSettings)
+	ON_BN_CLICKED(IDC_SCRIPT_BROWSE, &COptionsDlg::OnScriptBrowse)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

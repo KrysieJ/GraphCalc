@@ -51,7 +51,7 @@ CHyperLink::~CHyperLink()
 
 BEGIN_MESSAGE_MAP(CHyperLink, CStatic)
 	//{{AFX_MSG_MAP(CHyperLink)
-	ON_CONTROL_REFLECT(STN_CLICKED, OnClicked)
+	ON_CONTROL_REFLECT(STN_CLICKED, &CHyperLink::OnClicked)
 	ON_WM_CTLCOLOR_REFLECT()
 	ON_WM_SETCURSOR()
 	ON_WM_MOUSEMOVE()
@@ -403,7 +403,7 @@ HINSTANCE CHyperLink::GotoURL(LPCTSTR url, int showcmd)
 	HINSTANCE result = ShellExecute(NULL, _T("open"), url, NULL, NULL, showcmd);
 
 	// If it failed, get the .htm regkey and lookup the program
-	if ((UINT)result <= HINSTANCE_ERROR) {
+	if ((UINT_PTR)result <= HINSTANCE_ERROR) {
 		if (GetRegKey(HKEY_CLASSES_ROOT, _T(".htm"), key) == ERROR_SUCCESS) {
 			lstrcat(key, _T("\\shell\\open\\command"));
 
@@ -425,9 +425,9 @@ HINSTANCE CHyperLink::GotoURL(LPCTSTR url, int showcmd)
 
 #ifdef _UNICODE
 				USES_CONVERSION;
-				result = (HINSTANCE)WinExec(T2A(key), showcmd);
+				result = (HINSTANCE)(UINT_PTR)WinExec(T2A(key), showcmd);
 #else
-				result = (HINSTANCE)WinExec(key, showcmd);
+				result = (HINSTANCE)(UINT_PTR)WinExec(key, showcmd);
 #endif
 			}
 		}

@@ -44,12 +44,12 @@ void C2DEqIntersectionDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C2DEqIntersectionDlg, CDialog)
 	//{{AFX_MSG_MAP(C2DEqIntersectionDlg)
-	ON_EN_KILLFOCUS(IDC_GUESS, OnKillfocusGuess)
-	ON_BN_CLICKED(ID_SOLVE, OnSolve)
-	ON_CBN_SELCHANGE(IDC_EQUATION1_PICKER, OnSelchangeEquation1Picker)
-	ON_CBN_SELCHANGE(IDC_EQUATION2_PICKER, OnSelchangeEquation2Picker)
-	ON_BN_CLICKED(IDC_CENTER_GRAPH, OnCenterGraph)
-	ON_BN_CLICKED(IDC_Help, OnHelp)
+	ON_EN_KILLFOCUS(IDC_GUESS, &C2DEqIntersectionDlg::OnKillfocusGuess)
+	ON_BN_CLICKED(ID_SOLVE, &C2DEqIntersectionDlg::OnSolve)
+	ON_CBN_SELCHANGE(IDC_EQUATION1_PICKER, &C2DEqIntersectionDlg::OnSelchangeEquation1Picker)
+	ON_CBN_SELCHANGE(IDC_EQUATION2_PICKER, &C2DEqIntersectionDlg::OnSelchangeEquation2Picker)
+	ON_BN_CLICKED(IDC_CENTER_GRAPH, &C2DEqIntersectionDlg::OnCenterGraph)
+	ON_BN_CLICKED(IDC_Help, &C2DEqIntersectionDlg::OnHelp)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

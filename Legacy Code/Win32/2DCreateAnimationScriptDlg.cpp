@@ -41,12 +41,12 @@ void C2DCreateAnimationScriptDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C2DCreateAnimationScriptDlg, CDialog)
 	//{{AFX_MSG_MAP(C2DCreateAnimationScriptDlg)
-	ON_BN_CLICKED(IDC_RANGEOPTIONS_TIMES_FOREVER, EnableDisableControls)
-	ON_BN_CLICKED(IDC_RANGEOPTIONS_ONEWAY, EnableDisableControls)
-	ON_BN_CLICKED(IDC_TYPE_FRAMES, EnableDisableControls)
-	ON_BN_CLICKED(IDC_TYPE_REALTIME, EnableDisableControls)
-	ON_BN_CLICKED(IDC_RANGEOPTIONS_XTIMES, EnableDisableControls)
-	ON_BN_CLICKED(IDC_RANGEOPTIONS_TIMES_X, EnableDisableControls)
+	ON_BN_CLICKED(IDC_RANGEOPTIONS_TIMES_FOREVER, &C2DCreateAnimationScriptDlg::EnableDisableControls)
+	ON_BN_CLICKED(IDC_RANGEOPTIONS_ONEWAY, &C2DCreateAnimationScriptDlg::EnableDisableControls)
+	ON_BN_CLICKED(IDC_TYPE_FRAMES, &C2DCreateAnimationScriptDlg::EnableDisableControls)
+	ON_BN_CLICKED(IDC_TYPE_REALTIME, &C2DCreateAnimationScriptDlg::EnableDisableControls)
+	ON_BN_CLICKED(IDC_RANGEOPTIONS_XTIMES, &C2DCreateAnimationScriptDlg::EnableDisableControls)
+	ON_BN_CLICKED(IDC_RANGEOPTIONS_TIMES_X, &C2DCreateAnimationScriptDlg::EnableDisableControls)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

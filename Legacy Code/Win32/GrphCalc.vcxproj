@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Visual Studio 2026 (v145) project for the legacy MFC GraphCalc sources.
+     Generated from GrphCalc.dsp (Visual C++ 6.0).  See PORTING.md. -->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{3A226800-61E2-46F1-B7E4-3706FA092EF7}</ProjectGuid>
+    <Keyword>MFCProj</Keyword>
+    <RootNamespace>GrphCalc</RootNamespace>
+    <ProjectName>GrphCalc</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <!-- Run from the output folder so history/settings files are not written into the source tree. -->
+    <LocalDebuggerWorkingDirectory>$(OutDir)</LocalDebuggerWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <!-- First-pass port: keep the compiler in its permissive dialect and at C++14.
+           SDL checks stay off because they promote the deprecated-CRT warnings to errors. -->
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;NO_WARN_MBCS_MFC_DEPRECATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>htmlhelp.lib;winmm.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Message>Copying GraphCalc runtime data files to the output folder</Message>
+      <Command>xcopy /y /d "$(ProjectDir)constants.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)units.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)default.gcl" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)graphcalc.ini" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)grphcalc.chm" "$(OutDir)"
+robocopy "$(ProjectDir)scripts" "$(OutDir)scripts" /E /XD CVS /NJH /NJS /NFL /NDL /NP
+if errorlevel 8 exit /b 1
+exit /b 0</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <!-- First-pass port: keep the compiler in its permissive dialect and at C++14.
+           SDL checks stay off because they promote the deprecated-CRT warnings to errors. -->
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;NO_WARN_MBCS_MFC_DEPRECATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>htmlhelp.lib;winmm.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Message>Copying GraphCalc runtime data files to the output folder</Message>
+      <Command>xcopy /y /d "$(ProjectDir)constants.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)units.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)default.gcl" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)graphcalc.ini" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)grphcalc.chm" "$(OutDir)"
+robocopy "$(ProjectDir)scripts" "$(OutDir)scripts" /E /XD CVS /NJH /NJS /NFL /NDL /NP
+if errorlevel 8 exit /b 1
+exit /b 0</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <!-- First-pass port: keep the compiler in its permissive dialect and at C++14.
+           SDL checks stay off because they promote the deprecated-CRT warnings to errors. -->
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;NO_WARN_MBCS_MFC_DEPRECATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>htmlhelp.lib;winmm.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Message>Copying GraphCalc runtime data files to the output folder</Message>
+      <Command>xcopy /y /d "$(ProjectDir)constants.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)units.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)default.gcl" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)graphcalc.ini" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)grphcalc.chm" "$(OutDir)"
+robocopy "$(ProjectDir)scripts" "$(OutDir)scripts" /E /XD CVS /NJH /NJS /NFL /NDL /NP
+if errorlevel 8 exit /b 1
+exit /b 0</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <!-- First-pass port: keep the compiler in its permissive dialect and at C++14.
+           SDL checks stay off because they promote the deprecated-CRT warnings to errors. -->
+      <SDLCheck>false</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;NO_WARN_MBCS_MFC_DEPRECATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>htmlhelp.lib;winmm.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Message>Copying GraphCalc runtime data files to the output folder</Message>
+      <Command>xcopy /y /d "$(ProjectDir)constants.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)units.dat" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)default.gcl" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)graphcalc.ini" "$(OutDir)"
+xcopy /y /d "$(ProjectDir)grphcalc.chm" "$(OutDir)"
+robocopy "$(ProjectDir)scripts" "$(OutDir)scripts" /E /XD CVS /NJH /NJS /NFL /NDL /NP
+if errorlevel 8 exit /b 1
+exit /b 0</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="2DCreateAnimationScriptDlg.cpp" />
+    <ClCompile Include="2DEqIntersectionDlg.cpp" />
+    <ClCompile Include="2DEquationInterceptsDlg.cpp" />
+    <ClCompile Include="2DEvaluateParametricDlg.cpp" />
+    <ClCompile Include="2DGraphParametric.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="2DMinMaxDlg.cpp" />
+    <ClCompile Include="2DNSliderDlg.cpp" />
+    <ClCompile Include="2DOptionsMode.cpp" />
+    <ClCompile Include="2DOptionsParametricEqs.cpp" />
+    <ClCompile Include="2DOptionsParametricRange.cpp" />
+    <ClCompile Include="2DTableViewDlg.cpp" />
+    <ClCompile Include="3DGOAxes.cpp" />
+    <ClCompile Include="3DGOEquations.cpp" />
+    <ClCompile Include="3DGORangeAxisWire.cpp" />
+    <ClCompile Include="3DGORenderMode.cpp" />
+    <ClCompile Include="3DGOTickMarks.cpp" />
+    <ClCompile Include="3DGraph.cpp" />
+    <ClCompile Include="3DGraphEvaluateDlg.cpp" />
+    <ClCompile Include="3DGraphOptions.cpp" />
+    <ClCompile Include="ButtonShade.cpp" />
+    <ClCompile Include="CCalculator.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CGCCommand.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CJComboBox.cpp" />
+    <ClCompile Include="CPrintGraph.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CalculatorView.cpp" />
+    <ClCompile Include="CatalogDlg.cpp" />
+    <ClCompile Include="ClientCapture.cpp" />
+    <ClCompile Include="Color.cpp" />
+    <ClCompile Include="ColourPicker.cpp" />
+    <ClCompile Include="ColourPopup.cpp" />
+    <ClCompile Include="CommandData.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CommandDlg.cpp" />
+    <ClCompile Include="DistanceDlg.cpp" />
+    <ClCompile Include="EquationSolverDlg.cpp" />
+    <ClCompile Include="EvaluateDlg.cpp" />
+    <ClCompile Include="FindAreaDlg.cpp" />
+    <ClCompile Include="FlatEdit.cpp" />
+    <ClCompile Include="FlatEditEq.cpp" />
+    <ClCompile Include="GraphEuclidean.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GraphOptions.cpp" />
+    <ClCompile Include="GraphOptionsOne.cpp" />
+    <ClCompile Include="GraphOptionsPolar.cpp" />
+    <ClCompile Include="GraphOptionsTwo.cpp" />
+    <ClCompile Include="GraphOptionsZero.cpp" />
+    <ClCompile Include="GraphPolar.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GraphTabNameDlg.cpp" />
+    <ClCompile Include="GrphCalc.cpp" />
+    <ClCompile Include="GrphCalcDlg.cpp" />
+    <ClCompile Include="HyperLink.cpp" />
+    <ClCompile Include="Mode.cpp" />
+    <ClCompile Include="OptionsDlg.cpp" />
+    <ClCompile Include="OutputView.cpp" />
+    <ClCompile Include="Print.cpp" />
+    <ClCompile Include="ProgDlg.cpp" />
+    <ClCompile Include="PromptValDlg.cpp" />
+    <ClCompile Include="SaveScriptDlg.cpp" />
+    <ClCompile Include="SettingsIO.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TangentDlg.cpp" />
+    <ClCompile Include="Tfxdatatip.cpp" />
+    <ClCompile Include="Wave.cpp" />
+    <ClCompile Include="globals.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="graphview.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="2DCreateAnimationScriptDlg.h" />
+    <ClInclude Include="2DEqIntersectionDlg.h" />
+    <ClInclude Include="2DEquationInterceptsDlg.h" />
+    <ClInclude Include="2DEvaluateParametricDlg.h" />
+    <ClInclude Include="2DGraphParametric.h" />
+    <ClInclude Include="2DInfoBar.h" />
+    <ClInclude Include="2DMinMaxDlg.h" />
+    <ClInclude Include="2DNSliderDlg.h" />
+    <ClInclude Include="2DOptionsMode.h" />
+    <ClInclude Include="2DOptionsParametricEqs.h" />
+    <ClInclude Include="2DOptionsParametricRange.h" />
+    <ClInclude Include="2DTableViewDlg.h" />
+    <ClInclude Include="3DGOAxes.h" />
+    <ClInclude Include="3DGOEquations.h" />
+    <ClInclude Include="3DGORenderMode.h" />
+    <ClInclude Include="3DGOTickMarks.h" />
+    <ClInclude Include="3DGraph.h" />
+    <ClInclude Include="3DGraphEvaluateDlg.h" />
+    <ClInclude Include="3DGraphOptions.h" />
+    <ClInclude Include="3DMenus.h" />
+    <ClInclude Include="3dgorangeaxiswire.h" />
+    <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="ButtonShade.h" />
+    <ClInclude Include="Buttons.h" />
+    <ClInclude Include="CCalculator.h" />
+    <ClInclude Include="CGCCommand.h" />
+    <ClInclude Include="CJComboBox.h" />
+    <ClInclude Include="CPrintGraph.h" />
+    <ClInclude Include="CalculatorView.h" />
+    <ClInclude Include="CatalogDlg.h" />
+    <ClInclude Include="ClientCapture.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="ColourPicker.h" />
+    <ClInclude Include="ColourPopup.h" />
+    <ClInclude Include="CommandData.h" />
+    <ClInclude Include="CommandDlg.h" />
+    <ClInclude Include="ContextMenus.h" />
+    <ClInclude Include="DistanceDlg.h" />
+    <ClInclude Include="DrawGraph.h" />
+    <ClInclude Include="EquationSolverDlg.h" />
+    <ClInclude Include="EvaluateDlg.h" />
+    <ClInclude Include="FindAreaDlg.h" />
+    <ClInclude Include="FlatEdit.h" />
+    <ClInclude Include="FlatEditEq.h" />
+    <ClInclude Include="GraphEuclidean.h" />
+    <ClInclude Include="GraphOptions.h" />
+    <ClInclude Include="GraphOptionsOne.h" />
+    <ClInclude Include="GraphOptionsPolar.h" />
+    <ClInclude Include="GraphOptionsTwo.h" />
+    <ClInclude Include="GraphOptionsZero.h" />
+    <ClInclude Include="GraphPolar.h" />
+    <ClInclude Include="GraphTabNameDlg.h" />
+    <ClInclude Include="GrphCalc.h" />
+    <ClInclude Include="GrphCalcDlg.h" />
+    <ClInclude Include="GrphCalcInclude.h" />
+    <ClInclude Include="GrphCalc_i.h" />
+    <ClInclude Include="HyperLink.h" />
+    <ClInclude Include="Init.h" />
+    <ClInclude Include="Keywords.h" />
+    <ClInclude Include="MenuUpdates.h" />
+    <ClInclude Include="Menus.h" />
+    <ClInclude Include="Mode.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="OptionsDlg.h" />
+    <ClInclude Include="OutputView.h" />
+    <ClInclude Include="Print.h" />
+    <ClInclude Include="ProgDlg.h" />
+    <ClInclude Include="PromptValDlg.h" />
+    <ClInclude Include="SaveScriptDlg.h" />
+    <ClInclude Include="SettingsIO.h" />
+    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="Structs.h" />
+    <ClInclude Include="TangentDlg.h" />
+    <ClInclude Include="Tfxdatatip.h" />
+    <ClInclude Include="Wave.h" />
+    <ClInclude Include="Zoom.h" />
+    <ClInclude Include="globals.h" />
+    <ClInclude Include="graphview.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GrphCalc.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\GrphCalc.rc2" />
+    <None Include="constants.dat" />
+    <None Include="units.dat" />
+    <None Include="default.gcl" />
+    <None Include="PORTING.md" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

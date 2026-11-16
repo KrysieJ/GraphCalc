@@ -38,7 +38,7 @@ BEGIN_MESSAGE_MAP(CCalculatorView, CPropertySheet)
 	//{{AFX_MSG_MAP(CCalculatorView)
 	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
-	ON_MESSAGE(WM_RESIZEPAGE, OnResizePage)
+	ON_MESSAGE(WM_RESIZEPAGE, &CCalculatorView::OnResizePage)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ void CCalculatorView::OnSize(UINT nType, int cx, int cy)
 		pPage->MoveWindow (&m_PageRect);  */
 }
 
-LONG CCalculatorView::OnResizePage(UINT, LONG)
+LRESULT CCalculatorView::OnResizePage(WPARAM, LPARAM)
 {
 	CPropertyPage* pPage = GetActivePage();
 	ASSERT(pPage);

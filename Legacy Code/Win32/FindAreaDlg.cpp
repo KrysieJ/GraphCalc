@@ -29,7 +29,7 @@ CFindAreaDlg::CFindAreaDlg(CWnd* pParent /*=NULL*/)
 	//}}AFX_DATA_INIT
 }
 
-CFindAreaDlg::PassEq(EquationT *eqs, CCalculator *calc) {
+void CFindAreaDlg::PassEq(EquationT *eqs, CCalculator *calc) {
 	m_Eqs = eqs;
 	m_Calculator = calc;
 }
@@ -56,9 +56,9 @@ void CFindAreaDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CFindAreaDlg, CDialog)
 	//{{AFX_MSG_MAP(CFindAreaDlg)
-	ON_BN_CLICKED(IDC_BETWEEN, OnBetween)
-	ON_CBN_SELCHANGE(IDC_EQUATION, OnSelchangeEquation)
-	ON_CBN_SELCHANGE(IDC_EQUATION2, OnSelchangeEquation2)
+	ON_BN_CLICKED(IDC_BETWEEN, &CFindAreaDlg::OnBetween)
+	ON_CBN_SELCHANGE(IDC_EQUATION, &CFindAreaDlg::OnSelchangeEquation)
+	ON_CBN_SELCHANGE(IDC_EQUATION2, &CFindAreaDlg::OnSelchangeEquation2)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

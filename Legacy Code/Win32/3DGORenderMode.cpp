@@ -60,19 +60,19 @@ void C3DGORenderMode::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C3DGORenderMode, CDialog)
 	//{{AFX_MSG_MAP(C3DGORenderMode)
-	ON_BN_CLICKED(IDC_XMAX_YMAX_COLOR, OnXmaxYmaxColor)
-	ON_BN_CLICKED(IDC_XMAX_YMIN_COLOR, OnXmaxYminColor)
-	ON_BN_CLICKED(IDC_XMIN_YMAX_COLOR, OnXminYmaxColor)
-	ON_BN_CLICKED(IDC_XMIN_YMIN_COLOR, OnXminYminColor)
+	ON_BN_CLICKED(IDC_XMAX_YMAX_COLOR, &C3DGORenderMode::OnXmaxYmaxColor)
+	ON_BN_CLICKED(IDC_XMAX_YMIN_COLOR, &C3DGORenderMode::OnXmaxYminColor)
+	ON_BN_CLICKED(IDC_XMIN_YMAX_COLOR, &C3DGORenderMode::OnXminYmaxColor)
+	ON_BN_CLICKED(IDC_XMIN_YMIN_COLOR, &C3DGORenderMode::OnXminYminColor)
 	ON_WM_PAINT()
-	ON_BN_CLICKED(IDC_SHADING_MODEL, OnShadingModel)
-	ON_BN_CLICKED(IDC_SHADING_MODEL_ELEVATION, OnShadingModelElevation)
+	ON_BN_CLICKED(IDC_SHADING_MODEL, &C3DGORenderMode::OnShadingModel)
+	ON_BN_CLICKED(IDC_SHADING_MODEL_ELEVATION, &C3DGORenderMode::OnShadingModelElevation)
 	ON_WM_ERASEBKGND()
-	ON_BN_CLICKED(IDC_RENDER_MODE, OnRenderMode)
-	ON_BN_CLICKED(IDC_RENDER_SURFACE_TOPWIRES, OnRenderSurfaceTopwires)
-	ON_BN_CLICKED(IDC_RENDER_SURFACE_WIRES, OnRenderSurfaceWires)
-	ON_BN_CLICKED(IDC_RENDER_SURFCE, OnRenderSurfce)
-	ON_MESSAGE(CPN_SELENDOK, OnSelEndOK)
+	ON_BN_CLICKED(IDC_RENDER_MODE, &C3DGORenderMode::OnRenderMode)
+	ON_BN_CLICKED(IDC_RENDER_SURFACE_TOPWIRES, &C3DGORenderMode::OnRenderSurfaceTopwires)
+	ON_BN_CLICKED(IDC_RENDER_SURFACE_WIRES, &C3DGORenderMode::OnRenderSurfaceWires)
+	ON_BN_CLICKED(IDC_RENDER_SURFCE, &C3DGORenderMode::OnRenderSurfce)
+	ON_MESSAGE(CPN_SELENDOK, &C3DGORenderMode::OnSelEndOK)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -229,7 +229,7 @@ void C3DGORenderMode::OnXminYminColor() { m_XminYmin.OnClicked(); SetModified(tr
 // Return type		: LONG
 // Argument         : UINT lParam
 // Argument         : LONG /*wParam*/
-LONG C3DGORenderMode::OnSelEndOK(UINT lParam, LONG /*wParam*/) {
+LRESULT C3DGORenderMode::OnSelEndOK(WPARAM lParam, LPARAM /*wParam*/) {
 	InvalidateSwatch();
 	return 0;
 }

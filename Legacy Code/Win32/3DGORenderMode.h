@@ -57,7 +57,7 @@ protected:
 	afx_msg void OnRenderSurfce();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-	afx_msg LONG OnSelEndOK(UINT lParam, LONG wParam);
+	afx_msg LRESULT OnSelEndOK(WPARAM lParam, LPARAM wParam);
 
 private:
 	void InvalidateSwatch();

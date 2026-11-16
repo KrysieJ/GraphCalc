@@ -55,9 +55,9 @@ void CDistanceDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CDistanceDlg, CDialog)
 	//{{AFX_MSG_MAP(CDistanceDlg)
-	ON_BN_CLICKED(IDC_BETWEEN, OnBetween)
-	ON_CBN_SELCHANGE(IDC_EQUATION, OnSelchangeEquation)
-	ON_CBN_SELCHANGE(IDC_EQUATION2, OnSelchangeEquation2)
+	ON_BN_CLICKED(IDC_BETWEEN, &CDistanceDlg::OnBetween)
+	ON_CBN_SELCHANGE(IDC_EQUATION, &CDistanceDlg::OnSelchangeEquation)
+	ON_CBN_SELCHANGE(IDC_EQUATION2, &CDistanceDlg::OnSelchangeEquation2)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

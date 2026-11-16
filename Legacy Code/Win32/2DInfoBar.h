@@ -441,7 +441,8 @@ void CGraphView::InitializeInfoBarCtrlGroups()
 	g_InfoBarGroups[GRAPH2D_INFOBAR_PARAMETRIC_EQS].bOn = false;
 	g_InfoBarGroups[GRAPH2D_INFOBAR_PARAMETRIC_EQS].pCtrls = g_InfoBarParametricEquationCtrls;
 
-	for (int i = 1; GRAPH2D_INFOBAR_GROUPS > i; ++i)
+	int i;
+	for (i = 1; GRAPH2D_INFOBAR_GROUPS > i; ++i)
 		g_InfoBarGroups[i].start_y = g_InfoBarGroups[i - 1].start_y + g_InfoBarGroups[i - 1].height + GRAPH2D_INFOBAR_GROUP_SPACE_V;
 
 	// initialize polar & euclidean edit ctrls;

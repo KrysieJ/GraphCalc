@@ -39,9 +39,9 @@ void CEvaluateDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CEvaluateDlg, CDialog)
 	//{{AFX_MSG_MAP(CEvaluateDlg)
-	ON_CBN_SELCHANGE(IDC_EQ, OnSelchangeEq)
-	ON_EN_CHANGE(IDC_X, OnChangeX)
-	ON_CBN_DROPDOWN(IDC_EQ, OnDropdownEq)
+	ON_CBN_SELCHANGE(IDC_EQ, &CEvaluateDlg::OnSelchangeEq)
+	ON_EN_CHANGE(IDC_X, &CEvaluateDlg::OnChangeX)
+	ON_CBN_DROPDOWN(IDC_EQ, &CEvaluateDlg::OnDropdownEq)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

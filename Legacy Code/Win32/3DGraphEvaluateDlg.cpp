@@ -41,10 +41,10 @@ void C3DGraphEvaluateDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(C3DGraphEvaluateDlg, CDialog)
 	//{{AFX_MSG_MAP(C3DGraphEvaluateDlg)
-	ON_CBN_SELCHANGE(IDC_EQ, OnSelchangeEq)
-	ON_CBN_DROPDOWN(IDC_EQ, OnDropdownEq)
-	ON_EN_CHANGE(IDC_X, OnChangeX)
-	ON_EN_CHANGE(IDC_Y, OnChangeY)
+	ON_CBN_SELCHANGE(IDC_EQ, &C3DGraphEvaluateDlg::OnSelchangeEq)
+	ON_CBN_DROPDOWN(IDC_EQ, &C3DGraphEvaluateDlg::OnDropdownEq)
+	ON_EN_CHANGE(IDC_X, &C3DGraphEvaluateDlg::OnChangeX)
+	ON_EN_CHANGE(IDC_Y, &C3DGraphEvaluateDlg::OnChangeY)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

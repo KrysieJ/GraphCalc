@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 BEGIN_MESSAGE_MAP(CGrphCalcApp, CWinApp)
 	//{{AFX_MSG_MAP(CGrphCalcApp)
 	//}}AFX_MSG_MAP
-	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
+	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -63,16 +63,8 @@ BOOL CGrphCalcApp::InitInstance()
 
 	AfxInitRichEdit();
 
-	Enable3dControls();			// Call this when using MFC in a shared DLL
-
 	// needed for accelerator keys
 	ghAccelTable = LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR));
-
-#ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
-#else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
-#endif
 
 	CGrphCalcDlg dlg;
 	m_pMainWnd = &dlg;
