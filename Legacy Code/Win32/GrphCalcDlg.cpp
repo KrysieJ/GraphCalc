@@ -1089,7 +1089,7 @@ void CGrphCalcDlg::ResizeTabs(CSize new_size)
 
 	// tell graph to redraw if it is selected
 	int graph_index;
-	i = graph_index = GetActiveGraphTabIndex();
+	graph_index = GetActiveGraphTabIndex();
 	if (graph_index != -1)
 	{
 #ifdef GRAPH2D_INFOBAR

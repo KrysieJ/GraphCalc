@@ -2579,23 +2579,42 @@ void CGraphView::OnClearTangentLines()
 	RePaintNow();
 }
 
+#include <float.h>
+
 DWORD fpw_bak;
+bool fpw_bak_valid = false;	// true only if get_fpcw read the control word successfully
 //----------------------------------------------------------
 // get_fpcw - Get the floating-point control word.
+// Port note: was x86 inline assembly (fstcw), which x64 does
+// not support.  Uses the CRT instead; see PORTING.md.
 //----------------------------------------------------------
 DWORD get_fpcw()
 {
-	DWORD _fpcw = 0;
-	_asm fstcw  word ptr _fpcw
+	unsigned int _fpcw = 0;
+	fpw_bak_valid = (_controlfp_s(&_fpcw, 0, 0) == 0);
 	return _fpcw;
 }
 
 //----------------------------------------------------------
 // set_fpcw - Set the floating-point control word.
+// Port note: was x86 inline assembly (fldcw).  Restores the
+// exception, rounding and denormal settings.  Precision
+// control is restored on 32-bit x86 only; passing _MCW_PC or
+// _MCW_IC on x64 invokes the invalid-parameter handler.
 //----------------------------------------------------------
 void set_fpcw(DWORD _fpcw)
 {
-	_asm fldcw  word ptr _fpcw
+	if (!fpw_bak_valid)
+		return;	// nothing trustworthy was saved, so leave the settings alone
+
+	unsigned int mask = _MCW_EM | _MCW_RC | _MCW_DN;
+#ifdef _M_IX86
+	mask |= _MCW_PC;
+#endif
+
+	unsigned int current = 0;
+	if (_controlfp_s(&current, _fpcw, mask) != 0)
+		TRACE("set_fpcw: could not restore the floating-point control word\n");
 }
 
 void CGraphView::OnGraphPrint()

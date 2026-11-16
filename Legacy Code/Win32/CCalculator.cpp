@@ -2195,6 +2195,7 @@ int CCalculator::gcd(CArray<long double, long double> &params)
 // Return Value: the lcm of num1 and num2
 // Intent: to find the lcm of two numbers
 /*********************************************************/
+#undef small	// port note: the Windows SDK (rpcndr.h) defines 'small' as 'char', which breaks the local variable below
 int CCalculator::lcm(CArray<long double, long double> &params)
 {
 	// check for errors

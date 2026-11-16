@@ -19,10 +19,23 @@ Reviving GraphCalc (GPL, 1999-2003, Visual C++ 6.0 / MFC) in four steps:
 Run from a Developer PowerShell for Visual Studio 2026 (version 18) so `msbuild` is on the path:
 
 ```
-msbuild "Legacy Code\Win32\GrphCalc.vcxproj" /p:Configuration=Debug /p:Platform=x64 /m /fl /flp:logfile=build.log;verbosity=normal
+msbuild "Legacy Code\Win32\GrphCalc.vcxproj" /p:Configuration=Debug /p:Platform=x64 /m /fl "/flp:logfile=build.log;verbosity=normal"
 ```
 
 Work through the errors in small batches. After each batch, rebuild and check the error count went down.
+
+This work may run unattended across usage-limit resets. Keep a short running log at the bottom of `PORTING.md` (date, error count before and after, what was fixed) so progress survives a restart.
+
+Default effort is medium. If a problem genuinely needs deeper reasoning (for example a design decision, an MFC behaviour question, or the same error surviving two fix attempts), stop and ask the owner to switch to `/effort high` rather than guessing.
+
+## Shell commands (keep permission prompts down)
+
+The owner approves commands by hand, and PowerShell commands containing subexpressions prompt every time, even when an allow rule covers them. So:
+
+- Run one plain command per tool call. Do not chain with `;`, `&&`, `|` or wrap in `$(...)`, `@(...)`, `{...}` script blocks or `ForEach-Object`.
+- Run the build with exactly the command shown above, unchanged, so a single "don't ask again" approval keeps covering it.
+- To inspect `build.log` or source files, use the Read and Grep tools, not `Select-String`, `Get-Content` pipelines or other PowerShell one-liners.
+- Use the Edit tool for file changes, never PowerShell or `sed`.
 
 ## Rules for changes
 

@@ -2,7 +2,7 @@
 
 Date: 16 Nov. 2026
 Scope: `Legacy Code/Win32` (Visual C++ 6.0 / MFC 6, last touched 2003)
-Target: Visual Studio 2022 (v143 toolset), MFC, Windows 11 x64
+Target: Visual Studio 2026 (version 18, v145 toolset), MFC, Windows 11 x64
 
 ## Status: patched, NOT yet compiled
 
@@ -13,8 +13,11 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
 
 ## 1. How to build
 
-1. Visual Studio Installer: workload **Desktop development with C++**, plus the
-   individual component **C++ MFC for latest v143 build tools (x86 & x64)**.
+1. Visual Studio Installer (Visual Studio 2026): workload **Desktop development
+   with C++**, plus the individual component **C++ MFC for latest v145 build
+   tools (x86 & x64)**. Visual Studio 2026 is internally version 18, so its
+   developer shell profiles are labelled "VS 18". To build with Visual Studio
+   2022 instead, change `PlatformToolset` in `GrphCalc.vcxproj` back to `v143`.
 2. Open `GraphCalc Legacy.sln`. The new project is **GrphCalc**
    (`Legacy Code\Win32\GrphCalc.vcxproj`). Right-click it and choose
    *Set as Startup Project*, select **Debug | x64**, then build *the project*
@@ -41,6 +44,8 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
 | 11 | `Enable3dControls()` / `Enable3dControlsStatic()` calls removed | Obsolete no-ops | `GrphCalc.cpp` |
 | 12 | `delete p` to `delete[] p` for 17 `new char[n]` buffers | Mismatched array delete (undefined behaviour); no functional change | `CCalculator.cpp`, `GrphCalcDlg.cpp`, `OutputView.cpp` |
 | 13 | `#include <SDKDDKVer.h>` added ahead of the MFC headers | Declares the target Windows version | `StdAfx.h` |
+| 14 | (Step 2) `get_fpcw` / `set_fpcw` rewritten from x86 inline assembly (`fstcw` / `fldcw`) to `_controlfp_s`. The save reads the whole control word (mask 0). The restore uses the mask `_MCW_EM \| _MCW_RC \| _MCW_DN`, plus `_MCW_PC` on 32-bit x86 only (`#ifdef _M_IX86`). Return values are checked: if the save fails nothing is restored, and a failed restore is reported with `TRACE` in debug builds | Inline assembly is not available when compiling for x64. The functions save the floating-point settings before the Print dialog and restore them afterwards. On x64 `_controlfp_s` acts on the SSE2 control word (MXCSR) only, and passing the precision or infinity mask invokes the invalid-parameter handler, so those are never passed there [8]. **Behaviour note:** on x64 the exception-mask, rounding and denormal settings are protected; the x87 precision setting is not, because x64 code does not use it. `_controlfp_s` also leaves the denormal-operand exception mask unchanged [8] | `graphview.cpp` |
+| 15 | (Step 2) `#undef small` added before `CCalculator::lcm` | The Windows SDK header `rpcndr.h` defines `small` as a macro for `char`, which broke the local variable named `small`. The variable was not renamed (no-renaming rule); the macro is removed for the rest of that one file, which does not use it | `CCalculator.cpp` |
 
 ## 3. Project and repository changes
 
@@ -49,6 +54,15 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
   Debug/Release for x64 and Win32, same nine files excluded from the
   precompiled header as in the original. MBCS is a supported configuration
   again as of Visual Studio 2017 [6].
+* Spectre mitigation is **on** in every configuration (`SpectreMitigation` =
+  `Spectre`, i.e. `/Qspectre`), by owner decision. This also makes MSBuild
+  link the Spectre-mitigated CRT and MFC libraries, so those library
+  components must be installed (MSB8040 if not) [7].
+* Build isolation (Step 2): `<VcpkgEnabled>false</VcpkgEnabled>` in the Globals
+  property group. A user-wide vcpkg integration on the build machine was
+  adding its own include folder (outside this repository) to every compile.
+  The project uses no vcpkg packages, so the integration is switched off for
+  this project only. The vcpkg installation itself was not changed.
 * `GraphCalc Legacy.sln`: GrphCalc project added. The UWP template project is untouched.
 * `.gitignore`: the stock rule `[Ww][Ii][Nn]32/` matched the source folder
   itself, so **any new file under `Legacy Code/Win32` was silently ignored by
@@ -106,5 +120,20 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
 
 [6] Microsoft, "Unicode and multibyte character set (MBCS) support." [Online]. Available: https://learn.microsoft.com/en-us/cpp/atl-mfc-shared/unicode-and-multibyte-character-set-mbcs-support (accessed Nov. 16, 2026).
 
+[7] Microsoft, "/Qspectre," C/C++ compiler options reference. [Online]. Available: https://learn.microsoft.com/en-us/cpp/build/reference/qspectre (accessed Nov. 16, 2026).
+
+[8] Microsoft, "_controlfp_s," C runtime library reference. [Online]. Available: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/controlfp-s (accessed Nov. 16, 2026).
+
 Rows 5, 7, 8, 10 and 11 in section 2 rest on knowledge of current MFC and the
 Windows SDK rather than a cited page; the first build will confirm or refute them.
+
+## Step 2 progress log (Debug | x64)
+
+| Date and time | Errors before | Errors after | What was fixed |
+|---------------|---------------|--------------|----------------|
+| 16 Nov. 2026 14:01 | n/a | 17 | First build that reached the compiler (MSVC 14.52.37025, Spectre libraries). 17 errors, 278 warnings. Two causes: one stray loop variable (`GrphCalcDlg.cpp`), 16 errors from two lines of x86 inline assembly (`graphview.cpp`). |
+| 16 Nov. 2026 14:02 | 17 | 16 | `GrphCalcDlg.cpp` line 1092: removed the unused `i = ` from `i = graph_index = GetActiveGraphTabIndex();`. `i` belonged to the earlier `for` loop and its value was never read afterwards, so nothing changes at run time. Same class of fix as section 2 row 3. |
+| 16 Nov. 2026 14:02 | 16 | 16 | Stopped for an owner decision: `get_fpcw` / `set_fpcw` in `graphview.cpp` (lines 2586-2599) use x86 inline assembly, which the x64 compiler does not support. |
+| 16 Nov. 2026 14:08 | 16 | 8 | `graphview.cpp`: inline assembly replaced with `_controlfp_s` (section 2 row 14). `GrphCalc.vcxproj`: `VcpkgEnabled` = `false` (section 3). All 16 assembly errors gone; 8 new errors appeared in `CCalculator.cpp`, which had not been compiled before because the build stopped earlier. All 8 have one cause (next row). |
+| 16 Nov. 2026 14:09 | 8 | 0 | `CCalculator.cpp`: `#undef small` added just before `CCalculator::lcm` (section 2 row 15). **Debug x64 builds and links: 0 errors.** Output: `Legacy Code\Win32\x64\Debug\GrphCalc.exe`. Not yet run. |
+| 16 Nov. 2026 14:09 | 0 | 0 | **Release x64 builds and links: 0 errors, 648 warnings** (none fixed, by instruction). By type: C4244 373, LNK4286 128, C4273 92, C4005 46, C4700 4, C4018 3, C4311 1, C4302 1. Output: `Legacy Code\Win32\x64\Release\GrphCalc.exe`. Not yet run. |
