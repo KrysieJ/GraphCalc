@@ -1,3 +1,4 @@
+#include "StdAfx.h"	// port note: Windows headers first, so resource.h's IDC_HAND is not redefined by winuser.h (C4005)
 #include "CPrintGraph.h"
 
 CPrintGraph::CPrintGraph(int width, int height, CCalculator *pCalc, CArray<SGraphPrintLegend, SGraphPrintLegend> *Equations)

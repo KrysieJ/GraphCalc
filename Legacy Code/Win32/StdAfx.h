@@ -20,6 +20,13 @@
 #include <htmlhelp.h>
 #include <gl\GL.h>
 #include <gl\GLU.h>
+
+// port note: current Windows headers define IDC_HAND (the system hand cursor).
+// resource.h defines IDC_HAND as this program's own cursor resource (193).
+// Drop the Windows definition so resource.h's value is used without a
+// macro-redefinition warning (C4005).  No resource is renumbered.
+#undef IDC_HAND
+
 #include "Structs.h"
 
 #ifdef DEBUG

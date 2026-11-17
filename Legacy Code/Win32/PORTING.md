@@ -11,6 +11,10 @@ Microsoft compiler or MFC headers. Nothing here has been through `cl.exe`.
 Expect the first real build to surface further errors; section 5 lists where
 they are most likely. Treat this as "known breakages removed", not "builds clean".
 
+**Step 2 update (16 Nov. 2026):** the text above describes Step 1 as it was written.
+Debug x64 and Release x64 now build with zero errors and the Release build
+passed a smoke test; see the Step 2 sections at the end of this document.
+
 ## 1. How to build
 
 1. Visual Studio Installer (Visual Studio 2026): workload **Desktop development
@@ -22,7 +26,11 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
    (`Legacy Code\Win32\GrphCalc.vcxproj`). Right-click it and choose
    *Set as Startup Project*, select **Debug | x64**, then build *the project*
    (not the solution; the solution also holds the empty UWP template project).
-3. Output goes to `x64\Debug\GrphCalc.exe` at the repository root. A post-build
+3. The output folder depends on how the build is started. Building the
+   `.vcxproj` with `msbuild` (the command in `CLAUDE.md`) writes
+   `Legacy Code\Win32\x64\<Configuration>\GrphCalc.exe`. Building the solution
+   in the IDE writes `x64\<Configuration>\GrphCalc.exe` at the repository root.
+   `<Configuration>` is `Debug` or `Release`. In both cases a post-build
    step copies `constants.dat`, `units.dat`, `default.gcl`, `graphcalc.ini`,
    `grphcalc.chm` and `scripts\` beside the executable, because the program
    treats its start-up working directory as its application directory.
@@ -46,6 +54,11 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
 | 13 | `#include <SDKDDKVer.h>` added ahead of the MFC headers | Declares the target Windows version | `StdAfx.h` |
 | 14 | (Step 2) `get_fpcw` / `set_fpcw` rewritten from x86 inline assembly (`fstcw` / `fldcw`) to `_controlfp_s`. The save reads the whole control word (mask 0). The restore uses the mask `_MCW_EM \| _MCW_RC \| _MCW_DN`, plus `_MCW_PC` on 32-bit x86 only (`#ifdef _M_IX86`). Return values are checked: if the save fails nothing is restored, and a failed restore is reported with `TRACE` in debug builds | Inline assembly is not available when compiling for x64. The functions save the floating-point settings before the Print dialog and restore them afterwards. On x64 `_controlfp_s` acts on the SSE2 control word (MXCSR) only, and passing the precision or infinity mask invokes the invalid-parameter handler, so those are never passed there [8]. **Behaviour note:** on x64 the exception-mask, rounding and denormal settings are protected; the x87 precision setting is not, because x64 code does not use it. `_controlfp_s` also leaves the denormal-operand exception mask unchanged [8] | `graphview.cpp` |
 | 15 | (Step 2) `#undef small` added before `CCalculator::lcm` | The Windows SDK header `rpcndr.h` defines `small` as a macro for `char`, which broke the local variable named `small`. The variable was not renamed (no-renaming rule); the macro is removed for the rest of that one file, which does not use it | `CCalculator.cpp` |
+| 16 | (Step 2 warnings) `AFX_EXT_CLASS` removed from `class CCalculator` | The marker tells the compiler the class lives in a separate MFC extension DLL. `CCalculator` is compiled into the program itself, so the marker was wrong and caused 92 C4273 and 128 LNK4286 warnings, and made the linker emit an unneeded `GrphCalc.lib` / `GrphCalc.exp`. No change to what the code does | `CCalculator.h` |
+| 17 | (Step 2 warnings) `a_old` and `b_old` now start as NaN ("not a number") in `EqSolverBisection` and `MinMaxSolverBisection` | They were read before being given a value (C4700). `a_old` is always first read when `count == 1`, so its value never mattered. `b_old` can be first read on a later pass, where the test `b_old != b` decides whether `f(b)` is calculated; with an unset `b_old` that test was true in practice. NaN never equals any number, so the test is now always true the first time, which matches the old behaviour and removes the reliance on leftover memory. A starting value of 0 was rejected: with an upper bound of exactly 0 it would have skipped a needed calculation | `CCalculator.cpp` |
+| 18 | (Step 2 warnings) `#undef IDC_HAND` after the Windows headers in `StdAfx.h`; `#include "StdAfx.h"` added first in `CGCCommand.cpp` and `CPrintGraph.cpp` | Windows headers newer than VC6 define `IDC_HAND` (the system hand cursor); `resource.h` defines it as this program's own cursor, resource 193. The program's value still wins everywhere it is used (`GrphCalcDlg.cpp`), exactly as before, but without 46 C4005 warnings. The two `.cpp` files included `resource.h` before the Windows headers; neither uses `IDC_HAND`. No resource was renumbered | `StdAfx.h`, `CGCCommand.cpp`, `CPrintGraph.cpp` |
+| 19 | (Step 2, **deliberate accuracy fix, owner-approved behaviour change**) `#define E` changed from `2.71828182846` to `2.718281828459045` | The old value was correct to only 11 decimal places, so `ln(e)` returned 1.00000000000036 (see the smoke test). The new value is e to full double precision. Results of any calculation using the constant `e` change from about the 12th significant digit onward | `CCalculator.h` |
+| 20 | (Step 2 warnings) `CHyperLink::OnClicked`: `int result = (int)GotoURL(...)` changed to `INT_PTR result = (INT_PTR)GotoURL(...)`; the error path now calls `ReportError((int)result)` | Completes row 7, which had fixed the casts inside `GotoURL` but missed this caller: the 64-bit handle was squeezed into a 32-bit `int` (C4311, C4302). `INT_PTR` is a signed integer as wide as a pointer, so the test `result > HINSTANCE_ERROR` keeps the signed meaning it had in the 32-bit original. `ReportError` is only reached when the value is 32 or less, so narrowing it there loses nothing | `HyperLink.cpp` |
 
 ## 3. Project and repository changes
 
@@ -63,6 +76,17 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
   adding its own include folder (outside this repository) to every compile.
   The project uses no vcpkg packages, so the integration is switched off for
   this project only. The vcpkg installation itself was not changed.
+* Source encoding (Step 2, owner-approved): `HyperLink.cpp`, `Color.cpp` and
+  `Color.h` were converted from Latin-1 to UTF-8 with a byte-order mark; CRLF
+  line endings kept. They were the only 3 of 222 text files scanned that
+  contained non-ASCII bytes (11 characters in total: "©", and accented letters
+  in German comments and in the name "Pål K. Tønder"). Every one of those
+  characters is inside a comment, so the compiled program is unchanged. The
+  byte-order mark is what makes the Microsoft compiler read a file as UTF-8;
+  without one it assumes the current user code page [9]. Reason for the
+  change: the editing tools used for this port only handle UTF-8. All other
+  sources, the resource script and the data files are plain ASCII and were
+  not touched.
 * `GraphCalc Legacy.sln`: GrphCalc project added. The UWP template project is untouched.
 * `.gitignore`: the stock rule `[Ww][Ii][Nn]32/` matched the source folder
   itself, so **any new file under `Legacy Code/Win32` was silently ignored by
@@ -124,6 +148,8 @@ they are most likely. Treat this as "known breakages removed", not "builds clean
 
 [8] Microsoft, "_controlfp_s," C runtime library reference. [Online]. Available: https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/controlfp-s (accessed Nov. 16, 2026).
 
+[9] Microsoft, "/source-charset (Set source character set)," C/C++ compiler options reference. [Online]. Available: https://learn.microsoft.com/en-us/cpp/build/reference/source-charset-set-source-character-set (accessed Nov. 16, 2026).
+
 Rows 5, 7, 8, 10 and 11 in section 2 rest on knowledge of current MFC and the
 Windows SDK rather than a cited page; the first build will confirm or refute them.
 
@@ -137,6 +163,18 @@ Windows SDK rather than a cited page; the first build will confirm or refute the
 | 16 Nov. 2026 14:08 | 16 | 8 | `graphview.cpp`: inline assembly replaced with `_controlfp_s` (section 2 row 14). `GrphCalc.vcxproj`: `VcpkgEnabled` = `false` (section 3). All 16 assembly errors gone; 8 new errors appeared in `CCalculator.cpp`, which had not been compiled before because the build stopped earlier. All 8 have one cause (next row). |
 | 16 Nov. 2026 14:09 | 8 | 0 | `CCalculator.cpp`: `#undef small` added just before `CCalculator::lcm` (section 2 row 15). **Debug x64 builds and links: 0 errors.** Output: `Legacy Code\Win32\x64\Debug\GrphCalc.exe`. Not yet run. |
 | 16 Nov. 2026 14:09 | 0 | 0 | **Release x64 builds and links: 0 errors, 648 warnings** (none fixed, by instruction). By type: C4244 373, LNK4286 128, C4273 92, C4005 46, C4700 4, C4018 3, C4311 1, C4302 1. Output: `Legacy Code\Win32\x64\Release\GrphCalc.exe`. Not yet run. |
+
+## Step 2 warnings log (Release | x64)
+
+| Date and time | Warnings before | Warnings after | What changed |
+|---------------|-----------------|----------------|--------------|
+| 16 Nov. 2026 15:20 | 648 | 428 | (a) `CCalculator.h`: `AFX_EXT_CLASS` removed from `class CCalculator` (section 2 row 16). All 92 C4273 and all 128 LNK4286 gone. The linker no longer writes `GrphCalc.exp` / `GrphCalc.lib`; the copies left in the output folders are stale files from earlier builds (not deleted). The first attempt failed at the link step (LNK1104) only because a copy of `GrphCalc.exe` from the smoke test was still running; it was closed with the owner's approval. |
+| 16 Nov. 2026 15:21 | 428 | 424 | (b) `CCalculator.cpp`: `a_old` and `b_old` in `EqSolverBisection` and `MinMaxSolverBisection` now start as NaN (section 2 row 17). All 4 C4700 gone. Only `CCalculator.cpp` recompiled, so 424 is the previous total minus 4; the next full rebuild confirms it. |
+| 16 Nov. 2026 15:22 | 424 | 424 | (c) `HyperLink.cpp` postponed: the file contains Latin-1 characters in comments and could not be edited with the standard tool. Waiting on the owner's decision about converting such files to UTF-8. Batches (d) and (e) were done first. |
+| 16 Nov. 2026 15:28 | 424 | 378 | (d) `IDC_HAND` (section 2 row 18): `#undef IDC_HAND` added to `StdAfx.h` after the Windows headers (removed 44 C4005), and `#include "StdAfx.h"` added as the first line of `CGCCommand.cpp` and `CPrintGraph.cpp` (removed the last 2). All 46 C4005 gone. No resource renumbered; `resource.h` and `GrphCalc.rc` untouched. |
+| 16 Nov. 2026 15:28 | 378 | 378 | (e) `CCalculator.h`: `E` changed from `2.71828182846` to `2.718281828459045` (section 2 row 19, owner-approved behaviour change). No warning change expected or seen. This was a full recompile and confirms the running total: 378 = C4244 373, C4018 3, C4311 1, C4302 1. `ln(e)` not yet re-tested in the running program. |
+| 16 Nov. 2026 15:32 | 378 | 376 | Encoding conversion of `HyperLink.cpp`, `Color.cpp`, `Color.h` to UTF-8 with byte-order mark (section 3), then (c) `HyperLink.cpp` (section 2 row 20). C4311 and C4302 gone; no new warnings from the converted files. Only 6 files recompiled, so 376 is the confirmed 378 minus 2, not a count from one full rebuild. Remaining: C4244 373, C4018 3. |
+| 16 Nov. 2026 15:35 | n/a | n/a | Check only: **Debug Win32 builds and links, 0 errors, 339 warnings.** The `_M_IX86` branch of `set_fpcw` in `graphview.cpp` compiles. Output: `Legacy Code\Win32\Debug\GrphCalc.exe`. Not run. Win32 warnings not analysed. |
 
 ## Step 2 smoke test (Release x64, 16 Nov. 2026, run by Claude via computer use)
 

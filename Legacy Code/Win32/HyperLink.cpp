@@ -1,4 +1,4 @@
-// HyperLink.cpp : implementation file
+ï»¿// HyperLink.cpp : implementation file
 //
 // HyperLink static control. Will open the default browser with the given URL
 // when the user clicks on the link.
@@ -6,7 +6,7 @@
 // Copyright (C) 1997, 1998 Chris Maunder
 // All rights reserved. May not be sold for profit.
 //
-// Thanks to Pål K. Tønder for auto-size and window caption changes.
+// Thanks to PÃ¥l K. TÃ¸nder for auto-size and window caption changes.
 //
 // "GotoURL" function by Stuart Patterson
 // As seen in the August, 1997 Windows Developer's Journal.
@@ -70,11 +70,11 @@ BOOL CHyperLink::PreTranslateMessage(MSG* pMsg)
 void CHyperLink::OnClicked()
 {
 	m_bOverControl = FALSE;
-	int result = (int)GotoURL(m_strURL, SW_SHOW);
+	INT_PTR result = (INT_PTR)GotoURL(m_strURL, SW_SHOW);
 	m_bVisited = (result > HINSTANCE_ERROR);
 	if (!m_bVisited) {
 		MessageBeep(MB_ICONEXCLAMATION);     // Unable to follow link
-		ReportError(result);
+		ReportError((int)result);	// port note: only reached when result <= HINSTANCE_ERROR (32), so it fits an int
 	}
 	else
 		SetVisited();                        // Repaint to show visited colour
@@ -284,7 +284,7 @@ BOOL CHyperLink::GetAutoSize() const
 // then the window is merely shrunk, but if it is centred or right
 // justified then the window will have to be moved as well.
 //
-// Suggested by Pål K. Tønder
+// Suggested by PÃ¥l K. TÃ¸nder
 
 void CHyperLink::PositionWindow()
 {

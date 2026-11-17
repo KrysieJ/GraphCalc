@@ -1,3 +1,4 @@
+#include "StdAfx.h"	// port note: Windows headers first, so resource.h's IDC_HAND is not redefined by winuser.h (C4005)
 #include "CGCCommand.h"
 #include "GrphCalcDlg.h"
 #include "PromptValDlg.h"

@@ -1,10 +1,10 @@
-/****************************************************************************\
+ï»¿/****************************************************************************\
 Datei  : Color.h
 Projekt: Farbverwaltung
 Inhalt : CColor Deklaration
 Datum  : 10.01.1999
 Autor  : Christian Rodemeyer
-Hinweis: © 1999 by Christian Rodemeyer
+Hinweis: Â© 1999 by Christian Rodemeyer
 \****************************************************************************/
 #pragma once
 
@@ -12,7 +12,7 @@ Hinweis: © 1999 by Christian Rodemeyer
 #define __COLOR_H
 
 /****************************************************************************\
- CColor: Repräsentiert einen Farbwert
+ CColor: ReprÃ¤sentiert einen Farbwert
 \****************************************************************************/
 class CColor
 {
@@ -243,17 +243,17 @@ private:
 		COLORREF      m_colorref;
 		unsigned char m_color[4];
 	};
-	enum { c_red = 0, c_green = 1, c_blue = 2, c_null = 3 }; // enum Hack für colorbyte-Index
+	enum { c_red = 0, c_green = 1, c_blue = 2, c_null = 3 }; // enum Hack fÃ¼r colorbyte-Index
 
 	float m_hue;         // 0.0 .. 360.0  // Winkel
 	float m_saturation;  // 0.0 .. 1.0    // Prozent
 	float m_luminance;   // 0.0 .. 1.0    // Prozent
 
-	// Flag für Lazy Evaluation
+	// Flag fÃ¼r Lazy Evaluation
 	bool m_bIsRGB;
 	bool m_bIsHLS;
 
-	// statische Konstanten für benannte Farben
+	// statische Konstanten fÃ¼r benannte Farben
 	struct DNamedColor
 	{
 		COLORREF color;

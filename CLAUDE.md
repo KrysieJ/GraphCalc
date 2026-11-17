@@ -40,7 +40,7 @@ The owner approves commands by hand, and PowerShell commands containing subexpre
 ## Rules for changes
 
 - Keep fixes minimal and behaviour-preserving. This is a port, not a rewrite. No refactoring, renaming or reformatting.
-- Source files use CRLF line endings and Latin-1/ASCII encoding. Preserve both.
+- Source files use CRLF line endings. Most are plain ASCII; files that contain non-ASCII characters are UTF-8 with a byte-order mark (converted from Latin-1 in Step 2, see `PORTING.md`). Preserve both. Do not introduce non-ASCII characters into string literals or resource files without asking, because the program is built as multi-byte (MBCS), not Unicode.
 - Do not delete files. Do not edit the `.dsp`, `.dsw`, CVS folders or other VC6 artifacts.
 - Do not commit or push unless asked.
 - Record every change that is not an obvious compile fix in `PORTING.md` (what, why, where).

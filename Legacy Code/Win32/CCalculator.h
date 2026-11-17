@@ -149,7 +149,7 @@ enum ErrorModeE {
 #define SOLVER_DECIMAL_PRECISION 0.000000000000001
 #define DYDX_DELTA 0.000000001
 #define PI	3.1415926535897932384626
-#define E	2.71828182846
+#define E	2.718281828459045	// port note: was 2.71828182846 (11 decimal places); owner-approved accuracy fix, see PORTING.md
 #define MAX_STATE 12
 #define MAX_EQUATIONS 10
 #define MAX_PARAMETRIC_EQUATIONS 5
@@ -272,7 +272,7 @@ struct RangeT {
 	long double num;
 };*/
 
-class AFX_EXT_CLASS CCalculator {
+class CCalculator {
 public:
 	void SetTrigState(CString val);
 	void SetIntlMode(CString val);

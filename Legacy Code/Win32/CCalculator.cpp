@@ -3315,7 +3315,8 @@ ErrorT CCalculator::EqSolverBisection(CString eq, CString var, double dGuess, lo
 	long double max = dGuess + range;
 	long double a = min;
 	long double b = max;
-	long double a_old, b_old;
+	// port note: start as NaN (never equal to any number) so the first "x_old != x" test is always true; see PORTING.md
+	long double a_old = numeric_limits<long double>::quiet_NaN(), b_old = numeric_limits<long double>::quiet_NaN();
 	long double p(0), p_old(1);
 	long double fp, fa, fb;
 	int count(0);
@@ -3416,7 +3417,8 @@ ErrorT CCalculator::MinMaxSolverBisection(CString eq, CString var, double dMin,
 	stationary_point = 0;
 	long double a = dMin;
 	long double b = dMax;
-	long double a_old, b_old;
+	// port note: start as NaN (never equal to any number) so the first "x_old != x" test is always true; see PORTING.md
+	long double a_old = numeric_limits<long double>::quiet_NaN(), b_old = numeric_limits<long double>::quiet_NaN();
 	long double p = 0, p_old = 1;
 	long double fpp, fpa, fpb;
 	int count(0);
