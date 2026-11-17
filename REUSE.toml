@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2026 Krystal Jasmine
+# SPDX-License-Identifier: LicenseRef-NewCode-TBD
+
+version = 1
+
+# The legacy GraphCalc sources, including the Step 1 and Step 2 patches (L1a).
+[[annotations]]
+path = "Legacy Code/**"
+precedence = "override"
+SPDX-FileCopyrightText = "1999-2003 Michael Arrison, Brendan Fields"
+SPDX-License-Identifier = "GPL-2.0-only"
+
+# Root documents and configuration written for the rebuild.
+[[annotations]]
+path = ["CLAUDE.md", "STEP3-PLAN.md", ".gitignore", ".gitattributes"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Krystal Jasmine"
+SPDX-License-Identifier = "LicenseRef-NewCode-TBD"
+
+# Visual Studio blank-app template created by the owner in 2021; no GraphCalc
+# code (owner statement, 17 Nov. 2026).
+[[annotations]]
+path = ["GraphCalc Legacy.sln", "GraphCalc/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2021 Krystal Jasmine"
+SPDX-License-Identifier = "LicenseRef-NewCode-TBD"
+
+# Owner documents inside Legacy Code/ (annotations further down take precedence).
+[[annotations]]
+path = "Legacy Code/CLAUDE.md"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Krystal Jasmine"
+SPDX-License-Identifier = "LicenseRef-NewCode-TBD"
+
+# The Step 1 and 2 porting log describes changes to GPL code and may quote it.
+[[annotations]]
+path = "Legacy Code/Win32/PORTING.md"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Krystal Jasmine"
+SPDX-License-Identifier = "GPL-2.0-only"
+
+# New files whose format cannot carry a comment header.
+[[annotations]]
+path = ["rust/Cargo.lock", "rust/.claude/settings.json"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Krystal Jasmine"
+SPDX-License-Identifier = "LicenseRef-NewCode-TBD"

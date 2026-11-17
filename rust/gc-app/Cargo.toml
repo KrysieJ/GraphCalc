@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2026 Krystal Jasmine
+# SPDX-License-Identifier: LicenseRef-NewCode-TBD
+
+[package]
+name = "gc-app"
+description = "Application window (placeholder; empty window only)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+gc-engine = { path = "../gc-engine" }
+gc-script = { path = "../gc-script" }
+gc-settings = { path = "../gc-settings" }
+eframe = { workspace = true }
+egui_plot = { workspace = true }

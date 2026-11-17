@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2026 Krystal Jasmine
+# SPDX-License-Identifier: LicenseRef-NewCode-TBD
+
+[workspace]
+resolver = "3"
+members = ["gc-engine", "gc-script", "gc-settings", "gc-app"]
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+license = "LicenseRef-NewCode-TBD"
+publish = false
+
+# Every third-party crate below is dual-licensed "MIT OR Apache-2.0".
+# This project uses each of them under its MIT option (STEP3-PLAN.md section 3).
+[workspace.dependencies]
+eframe = { version = "0.37", default-features = false, features = ["glow", "default_fonts"] }
+egui_plot = "0.38"
+serde = { version = "1", features = ["derive"] }
+toml = "1"

@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: 2026 Krystal Jasmine
+# SPDX-License-Identifier: LicenseRef-NewCode-TBD
+
+# cargo-deny configuration. Run from rust\ with: cargo deny check
+#
+# Licence policy (owner decision L1b, 16 Nov. 2026): the Rust app contains no
+# GPL-2.0 code, so Apache-2.0 is allowed. No GPL, LGPL or AGPL licence of any
+# version is allowed; a dual-licensed crate must pass through a non-GPL option.
+
+[graph]
+# Only the Windows x64 build is shipped, so only its dependencies are checked.
+targets = ["x86_64-pc-windows-msvc"]
+
+[advisories]
+# RustSec advisory database. Any vulnerability, unmaintained or unsound
+# advisory fails the check; so does a yanked crate version.
+version = 2
+yanked = "deny"
+
+[licenses]
+version = 2
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+    "CC0-1.0",
+    # Placeholder for this project's own crates until decision L3.
+    "LicenseRef-NewCode-TBD",
+]
+confidence-threshold = 0.8
+
+# The fonts bundled by egui's default_fonts feature. Allowed for this one
+# crate only (owner decision L1b).
+[[licenses.exceptions]]
+crate = "epaint_default_fonts"
+allow = ["OFL-1.1", "Ubuntu-font-1.0"]
+
+[bans]
+multiple-versions = "warn"
+
+[sources]
+# Only crates.io; no git or third-party registries.
+unknown-registry = "deny"
+unknown-git = "deny"

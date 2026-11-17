@@ -372,3 +372,6 @@ FodyWeavers.xsd
 
 # msbuild file log written by the Step 2 build command
 /build.log
+
+# Rust build output (Step 3). Cargo.lock is committed on purpose.
+rust/target/

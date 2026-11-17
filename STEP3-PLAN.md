@@ -2,7 +2,7 @@
 
 Date: 16 Nov. 2026
 Status: **approved by the owner on 16 Nov. 2026, except open decisions L3 and B2
-(section 10).** No Rust code has been written yet.
+(section 10).** Phase 0a (clean foundations) finished on 17 Nov. 2026; no calculator logic has been written yet.
 Input: the legacy MFC sources in `Legacy Code/Win32`, which now build and run on
 Windows 11 x64 (Step 2, see `Legacy Code/Win32/PORTING.md`).
 
@@ -22,6 +22,7 @@ Windows 11 x64 (Step 2, see `Legacy Code/Win32/PORTING.md`).
 | T1 | Visual style: **egui's standard dark and light themes** for now; a custom theme may come later | 16 Nov. 2026 |
 | L2 | **Clean-room rewrite** of the engine and the script interpreter, so the new code can carry the new licence (section 3a) | 16 Nov. 2026 |
 | L1a | The C++ patches made in Steps 1 and 2 are modifications of GPL code, not a rewrite; they stay GPL-2.0-only with the rest of `Legacy Code/` | 16 Nov. 2026 |
+| L1b | Because the Rust app contains no GPL-2.0 code (L2), **Apache-2.0 dependencies are allowed**. egui's windowing and drawing layers (`winit`, `glutin`, `unicode-general-category` and others) are Apache-2.0-only, and every mainstream Rust GUI uses `winit`. GPL, LGPL and AGPL dependencies are not allowed. The fonts bundled with egui (OFL-1.1, Ubuntu-font-1.0) are allowed for that one crate. No file in `rust/` may be `derived` | 16 Nov. 2026 |
 
 ## 2. What has to be ported
 
@@ -62,8 +63,9 @@ legacy code is therefore a derivative work and stays under GPL-2.0.
 * As long as any GPL-2.0 code is in the program, **the program as a whole is
   distributed under GPL-2.0**. The new-code licence applies to the new files, not
   to the shipped app [12].
-* Libraries under Apache-2.0-only or GPL-3.0-only still cannot go into the same
-  program. The FSF considers Apache-2.0 incompatible with GPL version 2 [1], [2],
+* Libraries under Apache-2.0-only or GPL-3.0-only cannot go into the same
+  program as GPL-2.0 code. (This is why the Rust app must stay free of derived
+  code: it uses Apache-2.0-only libraries under decision L1b.) The FSF considers Apache-2.0 incompatible with GPL version 2 [1], [2],
   and the Apache Software Foundation acknowledges this [3]. GPL-2.0-only and
   GPL-3.0 cannot be combined in one binary [13].
 * The only ways to ship the whole app under the new licence are: rewrite every
@@ -88,16 +90,20 @@ legacy code is therefore a derivative work and stays under GPL-2.0.
 | Origin | Meaning | SPDX licence |
 |--------|---------|--------------|
 | `original` | Legacy code, unchanged or with port fixes (all of `Legacy Code/`) | `GPL-2.0-only` |
-| `derived` | Rust code translated from or based on legacy code | `GPL-2.0-only` |
+| `derived` | Rust code translated from or based on legacy code. **Not permitted in `rust/`** (decision L1b) | `GPL-2.0-only` |
 | `new` | Written from scratch, no legacy code used | `LicenseRef-NewCode-TBD` (later the chosen licence) |
 
 * The same file has a **library replacement table**: which legacy component
   (MFC dialogs, OpenGL, HTML Help, the colour picker, the INI profile API and so
   on) was replaced by which Rust library, with that library's licence.
 
-**Dependencies.** Only libraries that offer a GPL-2.0-compatible licence (MIT,
-BSD, zlib, ISC and similar). egui, eframe and egui_plot are "MIT OR Apache-2.0",
-so the MIT option is used [4], [5]. `cargo-deny` fails the build if any
+**Dependencies (decision L1b).** Allowed: MIT, Apache-2.0, BSD-2/3-Clause, ISC,
+Zlib, Unicode-3.0 and CC0-1.0, plus OFL-1.1 and Ubuntu-font-1.0 for egui's
+bundled fonts only. Not allowed: any GPL, LGPL or AGPL licence. egui, eframe and
+egui_plot are "MIT OR Apache-2.0", and the MIT option is used [4], [5]; several
+of their own dependencies are Apache-2.0-only, which is acceptable only because
+the app contains no GPL-2.0 code. `rust/PROVENANCE.md` lists them. Apache-2.0
+and OFL-1.1 require their licence texts to ship with the app (Phase 5). `cargo-deny` fails the build if any
 dependency's licence is outside the allow-list, and also checks dependencies
 against the RustSec security-advisory database.
 
@@ -126,6 +132,28 @@ Controls:
   may use them as tests.
 * Before release, a dirty-side session compares the Rust code against the legacy
   code for copied structure or text and reports anything suspicious.
+* Clean-side sessions never run a full-repository `reuse lint` or repository-wide
+  `git` listings, because these read or print `Legacy Code/` paths; they check
+  their own files with `reuse lint-file`. The reviewing chat runs the full lint.
+* A clean-side session that sees anything from `Legacy Code/` stops, reports it
+  and is retired. Incidents are logged below.
+
+**Access block test (Phase 0a, 17 Nov. 2026).** From a session started in
+`rust\`, the deny rules refused Read, Grep and Glob of `..\Legacy Code`, a
+PowerShell `Get-Content` of a file in it, and a Read of the root `build.log`; a
+control Read of this plan was allowed. Rules that worked use absolute paths
+(`Read(//**/Legacy Code/**)` and the full `//c/...` form); relative `../` forms
+blocked nothing. Remaining gaps: the PowerShell and Bash rules match only
+commands containing the text `Legacy Code` (a wildcard such as `..\Legacy*`
+would not match); bypass-permissions mode is untested and must not be used on
+the clean side; and the block does nothing for a session started anywhere other
+than `rust\`. The instruction in `CLAUDE.md` covers these gaps.
+
+**Clean-room incident log.**
+
+| Date | Session | What was seen | Outcome |
+|------|---------|---------------|---------|
+| 17 Nov. 2026 | Phase 0a clean-side session (started at the repository root) | Two build-output folder names, `Win32/Debug/` and `Win32/x64/`, printed by a `git` listing of ignored files while diagnosing `reuse lint`; no file contents | Standard Visual Studio output-folder names, no protected expression; the Phase 0a work (scaffolding only, no logic) stands. Session retired; Phase 1 starts in a new session from `rust\`. The session's saved lint report, which lists `Legacy Code/` paths, is to be deleted by the owner |
 
 **Known limitation.** GraphCalc's source has been public since the early 2000s,
 so the AI model behind both sides may have seen it during training. Two AI
@@ -192,9 +220,15 @@ One Cargo workspace in a new top-level folder `rust/` of this repository (R1).
 | `gc-settings` | TOML settings, `.gcl` import, AppData paths | `serde`, `toml` |
 | `gc-app` | egui window, keypad, output view, menus, 2D graph tabs, help viewer | all of the above, `eframe`, `egui_plot` |
 
+Versions at Phase 0a (17 Nov. 2026): `eframe` 0.37.0 and `egui_plot` 0.38.0
+(the 0.34 pair originally planned did not match each other), `serde` 1.0.229,
+`toml` 1.2.1. `Cargo.lock` is the record.
+
 **Numeric precision.** The legacy engine uses `long double`. In Microsoft's
-compiler `long double` is the same 64-bit type as `double` (to be confirmed in
-Phase 0 against Microsoft's documentation), so Rust's `f64` should reproduce the
+compiler `long double` uses the same IEEE-754 binary64 representation as
+`double`, with the same range and precision [17], and the C runtime's `long double`
+functions are identical to their `double` counterparts [18] (confirmed in Phase
+0a), so Rust's `f64` should reproduce the
 legacy results bit for bit. Phase 0 tests confirm this before the engine port starts.
 
 ## 8. Proving the port is correct
@@ -229,7 +263,7 @@ commit after each reviewed batch.
 
 | ID | Question | Notes |
 |----|----------|-------|
-| L3 | The new-code licence | Owner will decide later. It has to be GPL-2.0-compatible (MIT, BSD-2/3-Clause, zlib, ISC) for as long as the app contains GPL-2.0 code |
+| L3 | The new-code licence | Owner will decide later. Because the app contains Apache-2.0-only libraries (L1b), it has to be compatible with Apache-2.0: for example MIT, Apache-2.0, MPL-2.0 or GPL-3.0. GPL-2.0-only is ruled out |
 | B2 | New product name | Before Phase 5; does not block Phases 0 to 4 |
 
 ## References
@@ -265,3 +299,7 @@ commit after each reviewed batch.
 [15] Free Software Foundation Europe, "reuse-lint(1)." [Online]. Available: https://man.archlinux.org/man/reuse-lint.1.en.txt (accessed Nov. 16, 2026).
 
 [16] Free Software Foundation Europe, "reuse lint," reuse documentation. [Online]. Available: https://reuse.readthedocs.io/en/stable/man/reuse-lint.html (accessed Nov. 16, 2026).
+
+[17] Microsoft, "Conversions from floating-point types," Microsoft Learn. [Online]. Available: https://learn.microsoft.com/cpp/c-language/conversions-from-floating-point-types?view=msvc-170 (accessed Nov. 16, 2026).
+
+[18] Microsoft, "Math and floating-point support," Microsoft Learn. [Online]. Available: https://learn.microsoft.com/cpp/c-runtime-library/floating-point-support?view=msvc-170 (accessed Nov. 16, 2026).

@@ -1,0 +1,1 @@
+The licence for the new code in this repository has not yet been chosen (owner decision L3 in STEP3-PLAN.md). Until a licence is chosen and this file is replaced, files marked "LicenseRef-NewCode-TBD" are Copyright (C) 2026 Krystal Jasmine, all rights reserved: no permission to use, copy, modify or distribute them is granted to anyone.

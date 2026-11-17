@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: 2026 Krystal Jasmine
+# SPDX-License-Identifier: LicenseRef-NewCode-TBD
+
+[package]
+name = "gc-engine"
+description = "Calculator engine (placeholder; no logic yet)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]

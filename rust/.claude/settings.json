@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(//**/Legacy Code)",
+      "Read(//**/Legacy Code/**)",
+      "Edit(//**/Legacy Code)",
+      "Edit(//**/Legacy Code/**)",
+      "Read(//**/GraphCalc/build.log)",
+      "Edit(//**/GraphCalc/build.log)",
+      "Read(//c/Users/kryst/GitHub/GraphCalc/Legacy Code/**)",
+      "Edit(//c/Users/kryst/GitHub/GraphCalc/Legacy Code/**)",
+      "Read(//c/Users/kryst/GitHub/GraphCalc/build.log)",
+      "Edit(//c/Users/kryst/GitHub/GraphCalc/build.log)",
+      "PowerShell(*Legacy Code*)",
+      "Bash(*Legacy Code*)"
+    ]
+  }
+}
