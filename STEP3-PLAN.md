@@ -15,6 +15,10 @@ Windows 11 x64 (Step 2, see `Legacy Code/Win32/PORTING.md`).
 | D4 | `constants.dat` and `units.dat` are **modernised**: the built-in data becomes part of the application; only user-added constants and units live in a separate user file | 16 Nov. 2026 |
 | D5 | `.gcl` settings: **modernise if it is better for security or performance, otherwise stay compatible** (assessed in section 5) | 16 Nov. 2026 |
 | D6 | The legacy `.chm` help is replaced by a modern help system (recorded in Step 2) | 16 Nov. 2026 |
+| L1 | Legacy code is treated as **GPL-2.0-only**. New code gets a separate, more modern licence (to be chosen later). Every file records whether it is original, rewritten from the original, or new, and which libraries replaced legacy components (section 3) | 16 Nov. 2026 |
+| B1 | The port gets **a new name and branding** (to be chosen later). "RustCalc" and "RustyCalc" are already in use elsewhere and are ruled out | 16 Nov. 2026 |
+| R1 | Rust code lives in a `rust/` folder in **this repository** | 16 Nov. 2026 |
+| T1 | Visual style: **egui's standard dark and light themes** for now; a custom theme may come later | 16 Nov. 2026 |
 
 ## 2. What has to be ported
 
@@ -34,40 +38,75 @@ About 70 % of the legacy code is user interface that gets rewritten rather than
 translated. The engine and the script interpreter are the parts that must
 behave exactly as before.
 
-## 3. Licence: one decision needed before code is written
+## 3. Licensing and provenance (decision L1)
 
-GraphCalc is distributed under the GNU GPL; the file `COPYING` is GPL version 2.
-Neither the README nor the source headers say "version 2 only" or "or any later
-version".
+Not legal advice; this section records the owner's decision and the constraints
+that follow from it.
 
-This matters because many Rust libraries are licensed "MIT OR Apache-2.0". The
-FSF considers Apache-2.0 incompatible with GPL version 2 [1], [2]; the Apache
-Software Foundation itself acknowledges the FSF has never accepted it as
-compatible with GPLv2 [3]. GPL version 3 is compatible with Apache-2.0 [1].
+**Facts.** GraphCalc is distributed under the GNU GPL; the file `COPYING` is GPL
+version 2, and the owner has decided to treat it as GPL-2.0-only. The GPL defines
+a "work based on the Program" to include a work containing the Program or a
+portion of it "translated into another language" [10]. A Rust translation of the
+legacy code is therefore a derivative work and stays under GPL-2.0.
 
-Plan regardless of the answer:
+**What a separate licence for new code can and cannot do.**
 
-* Licence the port under the GPL, as the original requires for a derivative work.
-* Use only dependencies that offer a GPLv2-compatible licence (MIT, BSD, zlib,
-  ISC and similar). egui, eframe and egui_plot are "MIT OR Apache-2.0", so the
-  MIT option is used [4], [5].
-* Enforce this automatically with `cargo-deny`, which fails the build if any
-  dependency's licence is outside an allow-list. The same tool checks
-  dependencies against the RustSec security-advisory database.
+* New files written from scratch can carry their own licence, and keep it when
+  someone takes them out of this project, provided that licence is compatible
+  with GPL-2.0 (for example MIT). When MIT code and GPL code are combined, the MIT
+  part keeps its MIT licence and the combination is distributed under terms that
+  satisfy the GPL [11].
+* As long as any GPL-2.0 code is in the program, **the program as a whole is
+  distributed under GPL-2.0**. The new-code licence applies to the new files, not
+  to the shipped app [12].
+* Libraries under Apache-2.0-only or GPL-3.0-only still cannot go into the same
+  program. The FSF considers Apache-2.0 incompatible with GPL version 2 [1], [2],
+  and the Apache Software Foundation acknowledges this [3]. GPL-2.0-only and
+  GPL-3.0 cannot be combined in one binary [13].
+* The only ways to ship the whole app under the new licence are: rewrite every
+  GPL-derived part without using the original code (decision L2 below), or get
+  permission from the original copyright holders (Michael Arrison, Brendan Fields).
 
-**Owner decision L1:** license the port as "GPL-2.0-or-later" (wider choice of
-libraries, if the original terms allow it) or "GPL-2.0-only" (strictest reading).
-This is not legal advice; if in doubt, keep GPL-2.0-only and the allow-list above.
+**How provenance is recorded.** The repository follows the REUSE specification
+(Free Software Foundation Europe):
+
+* Each licence's full text goes in a `LICENSES/` folder, named by its SPDX
+  identifier, and each file carries an `SPDX-License-Identifier` and
+  `SPDX-FileCopyrightText` header [14].
+* The `reuse lint` tool reports any file without copyright and licence
+  information, so nothing can slip through unlabelled [15].
+* Until the new licence is chosen, new files use a placeholder identifier,
+  `LicenseRef-NewCode-TBD`. Licence identifiers starting with `LicenseRef-` are
+  accepted by the tool [16]. Until it is replaced, new code is not yet licensed
+  to anyone else.
+* `rust/PROVENANCE.md` lists every Rust source file with one of three origins, and
+  the legacy file and function it came from:
+
+| Origin | Meaning | SPDX licence |
+|--------|---------|--------------|
+| `original` | Legacy code, unchanged or with port fixes (all of `Legacy Code/`) | `GPL-2.0-only` |
+| `derived` | Rust code translated from or based on legacy code | `GPL-2.0-only` |
+| `new` | Written from scratch, no legacy code used | `LicenseRef-NewCode-TBD` (later the chosen licence) |
+
+* The same file has a **library replacement table**: which legacy component
+  (MFC dialogs, OpenGL, HTML Help, the colour picker, the INI profile API and so
+  on) was replaced by which Rust library, with that library's licence.
+
+**Dependencies.** Only libraries that offer a GPL-2.0-compatible licence (MIT,
+BSD, zlib, ISC and similar). egui, eframe and egui_plot are "MIT OR Apache-2.0",
+so the MIT option is used [4], [5]. `cargo-deny` fails the build if any
+dependency's licence is outside the allow-list, and also checks dependencies
+against the RustSec security-advisory database.
 
 ## 4. Microsoft Store considerations
 
 * Open-source apps are allowed in the Store when listed by the creator or "a party
   with an appropriate license" [6]. The GPL provides that licence, but the
   listing must include the licence and an offer of source code.
-* **Name and branding (owner decision B1):** the original authors (Michael
-  Arrison, Brendan Fields) and the graphcalc.com name are not ours. Options:
-  ask the original authors for permission to use the name, or publish under a
-  new name with "based on GraphCalc" credit.
+* **Name and branding (B1):** the port will have a new name; the listing credits
+  "based on GraphCalc by Michael Arrison and Brendan Fields". "RustCalc" and
+  "RustyCalc" are already in use. Check a shortlist against the Store, GitHub and
+  a trademark search before choosing.
 * Packaging: the Store requires MSIX. A Rust program can be packaged with
   Microsoft's `winapp` CLI, which has a Rust guide [7], or directly with the
   Windows SDK's `MakeAppx.exe`. The unsigned MSIX is uploaded and Microsoft signs it [8].
@@ -109,8 +148,7 @@ script without asking. Writing back to `.gcl` is not needed, so it is dropped.
 
 ## 7. Architecture
 
-One Cargo workspace in a new top-level folder `rust/` of this repository
-(owner decision R1; a separate repository is the alternative).
+One Cargo workspace in a new top-level folder `rust/` of this repository (R1).
 
 | Crate | Contents | Depends on |
 |-------|----------|------------|
@@ -141,7 +179,7 @@ port (for example `ln(e)` and the min/max search with an upper bound of 0).
 
 | Phase | Goal | Done when |
 |-------|------|-----------|
-| 0. Foundations | Workspace skeleton, `cargo-deny` licence and advisory checks, golden results captured from the legacy build, `long double` question settled, `CLAUDE.md` updated for Rust | `cargo test` and `cargo deny check` pass on an empty engine; golden files committed |
+| 0. Foundations | Workspace skeleton, `cargo-deny` licence and advisory checks, REUSE layout (`LICENSES/`, SPDX headers, `rust/PROVENANCE.md`), golden results captured from the legacy build, `long double` question settled, `CLAUDE.md` updated for Rust | `cargo test`, `cargo deny check` and `reuse lint` pass on an empty engine; golden files committed |
 | 1. Engine | Port `CCalculator` | All engine golden tests pass |
 | 2. Scripting | Port `CGCCommand` for the non-graphics commands, with the sandbox | Bundled non-graphics scripts produce golden output |
 | 3. App shell | egui window, keypad, output view, menus, options, TOML settings, `.gcl` import, built-in constants and units | Owner smoke test of the calculator |
@@ -154,12 +192,11 @@ commit after each reviewed batch.
 
 ## 10. Open owner decisions
 
-| ID | Question | Recommendation |
-|----|----------|----------------|
-| L1 | Port licence: GPL-2.0-only or GPL-2.0-or-later? | GPL-2.0-only unless the original terms are confirmed as "or later" |
-| B1 | Product name and branding for the Store | Decide before Phase 5; does not block Phases 0 to 4 |
-| R1 | Rust code in this repository (`rust/`) or a new repository? | This repository, so legacy and port stay side by side for comparison |
-| T1 | Visual style: Windows 11 default dark/light, or a custom theme | Default egui dark and light first; a custom theme can be added in Phase 3 |
+| ID | Question | Notes |
+|----|----------|-------|
+| L2 | **Before Phase 1:** how are the engine and the script interpreter written? (a) **Translate** from the legacy C++: faster and lowest risk of behaviour differences, but those parts are `derived` and stay GPL-2.0-only. (b) **Clean-room**: one session writes a behaviour specification from the legacy code and golden results; a separate Claude Code session that never opens `Legacy Code/` implements from the specification and tests only. Slower, and the separation has to be kept strictly, but those parts can be `new` | Only (b) or the original authors' permission lets the whole app move to the new licence later. The UI is rewritten from scratch either way, so it is `new` |
+| L3 | The new-code licence | Owner will decide later. It has to be GPL-2.0-compatible (MIT, BSD-2/3-Clause, zlib, ISC) for as long as the app contains GPL-2.0 code |
+| B2 | New product name | Before Phase 5; does not block Phases 0 to 4 |
 
 ## References
 
