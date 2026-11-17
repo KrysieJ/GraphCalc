@@ -191,6 +191,15 @@ Windows SDK rather than a cited page; the first build will confirm or refute the
 | Print | 2D Print dialog, Cancel, then more arithmetic | Pass; dialog opens, cancels cleanly, maths unaffected (exercises `_controlfp_s` code) |
 | Scripts | Script Library menu; If Testing; While Testing | Pass; all variables match the script logic (`good`=2, `yeahElse`=2, `i`=7, `j`=36) |
 
+**Re-test after warnings batch 1** (Release x64 built 16 Nov. 2026 15:32, run 21:15 by Claude via computer use):
+
+| Area | Test | Result |
+|------|------|--------|
+| Constant `e` (row 19) | `e`, `ln(e)`, `e^2` | Pass: 2.71828182845904, **1**, 7.38905609893064 |
+| Equation solver (row 17) | `x^2-2` from 1; `x^2+9=x+10` from -5 and from 5 | Pass: 1.4142135623731; -0.618033988749 and 1.618033988749 (= (1 +/- sqrt 5)/2) |
+| Min/max finder (row 17) | `sin(x)` on [0, 3]; on [-3, 0] (upper bound exactly 0, the case that ruled out a 0 start value) | Pass: max at 1.5707963268 (y = 1); min at -1.5707963268 (y = -1) |
+| Arithmetic | `2+3*4` | Pass: 14 |
+
 Not tested: actually printing, saving/loading `.gcl` and `.gcs` files, DXF export, bitmap export, Win32 builds.
 
 ## Owner decisions for later steps
