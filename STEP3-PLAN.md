@@ -1,7 +1,8 @@
 # GraphCalc Step 3: Rust port plan
 
 Date: 16 Nov. 2026
-Status: **draft for owner approval.** No Rust code has been written yet.
+Status: **approved by the owner on 16 Nov. 2026, except open decisions L3 and B2
+(section 10).** No Rust code has been written yet.
 Input: the legacy MFC sources in `Legacy Code/Win32`, which now build and run on
 Windows 11 x64 (Step 2, see `Legacy Code/Win32/PORTING.md`).
 
@@ -19,6 +20,8 @@ Windows 11 x64 (Step 2, see `Legacy Code/Win32/PORTING.md`).
 | B1 | The port gets **a new name and branding** (to be chosen later). "RustCalc" and "RustyCalc" are already in use elsewhere and are ruled out | 16 Nov. 2026 |
 | R1 | Rust code lives in a `rust/` folder in **this repository** | 16 Nov. 2026 |
 | T1 | Visual style: **egui's standard dark and light themes** for now; a custom theme may come later | 16 Nov. 2026 |
+| L2 | **Clean-room rewrite** of the engine and the script interpreter, so the new code can carry the new licence (section 3a) | 16 Nov. 2026 |
+| L1a | The C++ patches made in Steps 1 and 2 are modifications of GPL code, not a rewrite; they stay GPL-2.0-only with the rest of `Legacy Code/` | 16 Nov. 2026 |
 
 ## 2. What has to be ported
 
@@ -26,17 +29,17 @@ Measured from the 165 legacy source files that are built (about 47,600 lines):
 
 | Area | Lines | Treatment | Release |
 |------|-------|-----------|---------|
-| Calculator engine: expression parser, 64 operators, number bases, formatting, equation solver, min/max, units, constants (`CCalculator`) | 4,400 | Port line-by-line in meaning; this is where correctness matters most | 1 |
-| Scripting: about 176 `.gcs` commands, `If`/`ElseIf`/`While`, prompts (`CGCCommand`) | 2,000 | Port; sandbox (section 6) | 1 |
+| Calculator engine: expression parser, 64 operators, number bases, formatting, equation solver, min/max, units, constants | 4,400 | Clean-room rewrite from a behaviour spec (L2); this is where correctness matters most | 1 |
+| Scripting: about 176 `.gcs` commands, `If`/`ElseIf`/`While`, prompts | 2,000 | Clean-room rewrite from a behaviour spec (L2); sandbox (section 6) | 1 |
 | 2D graphing: Euclidean, polar, parametric; zoom, trace, area, tangent, distance, intercepts, intersections, min/max, table, N-slider | 17,700 | Rewrite on `egui_plot`, reusing the engine | 1 |
 | Main window, keypad, menus, output view, options, settings I/O | 10,900 | Rewrite in egui | 1 |
 | Old third-party MFC widgets (colour picker, hyperlink, data tips, flat edits, sounds) | 4,700 | Drop; egui provides equivalents | 1 |
 | 3D graphing (OpenGL) | 6,100 | Rewrite on `wgpu` | 2 |
 | Printing, bitmap and DXF export | 2,000 | Rewrite | 2 |
 
-About 70 % of the legacy code is user interface that gets rewritten rather than
-translated. The engine and the script interpreter are the parts that must
-behave exactly as before.
+About 70 % of the legacy code is user interface. All of it, engine included, is
+rewritten rather than translated (L2). The engine and the script interpreter are
+the parts that must behave exactly as before.
 
 ## 3. Licensing and provenance (decision L1)
 
@@ -64,7 +67,7 @@ legacy code is therefore a derivative work and stays under GPL-2.0.
   and the Apache Software Foundation acknowledges this [3]. GPL-2.0-only and
   GPL-3.0 cannot be combined in one binary [13].
 * The only ways to ship the whole app under the new licence are: rewrite every
-  GPL-derived part without using the original code (decision L2 below), or get
+  GPL-derived part without using the original code (chosen: section 3a), or get
   permission from the original copyright holders (Michael Arrison, Brendan Fields).
 
 **How provenance is recorded.** The repository follows the REUSE specification
@@ -97,6 +100,38 @@ BSD, zlib, ISC and similar). egui, eframe and egui_plot are "MIT OR Apache-2.0",
 so the MIT option is used [4], [5]. `cargo-deny` fails the build if any
 dependency's licence is outside the allow-list, and also checks dependencies
 against the RustSec security-advisory database.
+
+## 3a. Clean-room procedure (decision L2)
+
+Facts and ideas are not protected by copyright; the way they are written in code is.
+A clean-room rewrite keeps the two apart: people (here, sessions) who have read the
+original write down **what** it does; different people who have never seen it write
+**how** from that description alone. Not legal advice.
+
+| Role | Who | Reads | Writes |
+|------|-----|-------|--------|
+| Dirty side | A Claude Code session started at the repository root, and the reviewing chat | Legacy code, the running Step 2 program | `spec/` (behaviour only, rules in `Legacy Code/CLAUDE.md`), `spec/golden/` |
+| Review gate | The owner, helped by the reviewing chat | Each spec chunk | Marks it `Reviewed: yes` only if it contains no code, comments, internal names or code structure |
+| Clean side | A separate Claude Code session started in `rust\` | `spec/`, `rust/`, root `CLAUDE.md`, this plan | `rust/` only |
+
+Controls:
+
+* Every Claude Code session starts with no memory of other sessions, so the
+  separation is between sessions. A session's side is fixed for its whole life
+  (root `CLAUDE.md`).
+* Clean-side sessions get a permission **deny rule** for `Legacy Code/` in
+  `rust/.claude/settings.json`. Phase 0a tests that the rule actually refuses a
+  read; the instruction in `CLAUDE.md` is the backup, not the only control.
+* Golden results are behaviour (input and displayed output), so the clean side
+  may use them as tests.
+* Before release, a dirty-side session compares the Rust code against the legacy
+  code for copied structure or text and reports anything suspicious.
+
+**Known limitation.** GraphCalc's source has been public since the early 2000s,
+so the AI model behind both sides may have seen it during training. Two AI
+sessions are weaker evidence of independent creation than two separate human
+teams. The controls above (behaviour-only spec, access block, similarity check
+before release) reduce that risk but do not remove it.
 
 ## 4. Microsoft Store considerations
 
@@ -142,7 +177,7 @@ script without asking. Writing back to `.gcl` is not needed, so it is dropped.
 |---------------------------|------|
 | Scripts can write files anywhere (`SaveAs`, `SaveOutput`, `2DSaveBitmap`, `3DSaveBitmap`) and change which settings file and start-up script are used | File-writing commands ask the user for the location the first time a script uses them, or are limited to a user-chosen scripts folder |
 | `RunScript` can call scripts recursively; `While` loops have no limit | Depth limit on `RunScript`; iteration limit on loops, with a "keep going?" prompt |
-| `HyperLink` falls back to building a command line from the registry and running it with `WinExec` | Open links only through the standard Windows "open URL" call; no command-line building |
+| Opening web links could fall back to building and running a command line | Open links only through the standard Windows "open URL" call; no command-line building |
 | Unsafe C string handling (26 `strcpy`-style calls) | Not applicable in safe Rust; the engine and script crates use `#![forbid(unsafe_code)]` |
 | Dependencies | `cargo-deny` for licences and RustSec advisories; `Cargo.lock` committed; no network access at run time |
 
@@ -168,7 +203,6 @@ The legacy program already contains test material:
 
 * `scripts/Test/engine.gcs` (242 lines), `solver.gcs`, `view.gcs`,
   `2dgraph.gcs`, `3dgraph.gcs` and the other bundled scripts.
-* A built-in `TestFile` routine that evaluates every line of a text file.
 
 Phase 0 runs these through the **Step 2 build** and saves the output as "golden"
 results. Every Rust engine and script change is then tested against them: same
@@ -179,9 +213,10 @@ port (for example `ln(e)` and the min/max search with an upper bound of 0).
 
 | Phase | Goal | Done when |
 |-------|------|-----------|
-| 0. Foundations | Workspace skeleton, `cargo-deny` licence and advisory checks, REUSE layout (`LICENSES/`, SPDX headers, `rust/PROVENANCE.md`), golden results captured from the legacy build, `long double` question settled, `CLAUDE.md` updated for Rust | `cargo test`, `cargo deny check` and `reuse lint` pass on an empty engine; golden files committed |
-| 1. Engine | Port `CCalculator` | All engine golden tests pass |
-| 2. Scripting | Port `CGCCommand` for the non-graphics commands, with the sandbox | Bundled non-graphics scripts produce golden output |
+| 0a. Clean foundations (clean side) | Workspace skeleton, `cargo-deny` licence and advisory checks, REUSE layout (`LICENSES/`, SPDX headers, `rust/PROVENANCE.md`), `long double` question settled, clean-room access block tested | `cargo test`, `cargo deny check` and `reuse lint` pass on an empty engine; a clean-side session is refused when it tries to read `Legacy Code/` |
+| 0b. Specification and golden results (dirty side) | Behaviour spec of the engine and the script language in `spec/`; golden results from the Step 2 build in `spec/golden/`; owner review of each spec chunk | Engine spec reviewed and marked `Reviewed: yes`; golden files committed |
+| 1. Engine | Clean-room rewrite of the calculator engine from `spec/` | All engine golden tests pass |
+| 2. Scripting | Clean-room rewrite of the script interpreter for the non-graphics commands, with the sandbox | Bundled non-graphics scripts produce golden output |
 | 3. App shell | egui window, keypad, output view, menus, options, TOML settings, `.gcl` import, built-in constants and units | Owner smoke test of the calculator |
 | 4. 2D graphing | Graph tabs, three graph modes, zoom, all analysis tools, graph script commands | `2dgraph.gcs` behaves as legacy; owner smoke test |
 | 5. Help and release | Markdown help, MSIX packaging, Store listing material | Package installs and runs from MSIX on a clean Windows 11 machine |
@@ -194,7 +229,6 @@ commit after each reviewed batch.
 
 | ID | Question | Notes |
 |----|----------|-------|
-| L2 | **Before Phase 1:** how are the engine and the script interpreter written? (a) **Translate** from the legacy C++: faster and lowest risk of behaviour differences, but those parts are `derived` and stay GPL-2.0-only. (b) **Clean-room**: one session writes a behaviour specification from the legacy code and golden results; a separate Claude Code session that never opens `Legacy Code/` implements from the specification and tests only. Slower, and the separation has to be kept strictly, but those parts can be `new` | Only (b) or the original authors' permission lets the whole app move to the new licence later. The UI is rewritten from scratch either way, so it is `new` |
 | L3 | The new-code licence | Owner will decide later. It has to be GPL-2.0-compatible (MIT, BSD-2/3-Clause, zlib, ISC) for as long as the app contains GPL-2.0 code |
 | B2 | New product name | Before Phase 5; does not block Phases 0 to 4 |
 
@@ -217,3 +251,17 @@ commit after each reviewed batch.
 [8] I. Packard, "Building WSL-UI: The Microsoft Store journey," DEV Community. [Online]. Available: https://dev.to/octasoft-ltd/building-wsl-ui-the-microsoft-store-journey-2428 (accessed Nov. 16, 2026).
 
 [9] Advanced Installer, "MSIX introduction." [Online]. Available: https://www.advancedinstaller.com/msix-introduction (accessed Nov. 16, 2026).
+
+[10] M. Välimäki, "GNU General Public License and the distribution of derivative works," *Journal of Information, Law and Technology*, 2005(1). [Online]. Available: https://warwick.ac.uk/fac/soc/law/elj/jilt/2005_1/valimaki/ (accessed Nov. 16, 2026). Quotes GPL version 2, section 0.
+
+[11] "GPL and virality," Julia discourse. [Online]. Available: https://discourse.julialang.org/t/gpl-and-virality/7715 (accessed Nov. 16, 2026).
+
+[12] FOSSA, "Is MIT compatible with GPL 2.0?" [Online]. Available: https://fossa.com/resources/devops-tools/license-compatibility-checker/mit-vs-gpl-2-0/ (accessed Nov. 16, 2026).
+
+[13] OSPO Alliance, "What is the difference between the GPL and MIT licences?" [Online]. Available: https://ospo-alliance.org/faq/licences/gpl-vs-mit/ (accessed Nov. 16, 2026).
+
+[14] Free Software Foundation Europe, "Tutorial: How to become REUSE-compliant." [Online]. Available: https://reuse.software/tutorial/ (accessed Nov. 16, 2026).
+
+[15] Free Software Foundation Europe, "reuse-lint(1)." [Online]. Available: https://man.archlinux.org/man/reuse-lint.1.en.txt (accessed Nov. 16, 2026).
+
+[16] Free Software Foundation Europe, "reuse lint," reuse documentation. [Online]. Available: https://reuse.readthedocs.io/en/stable/man/reuse-lint.html (accessed Nov. 16, 2026).

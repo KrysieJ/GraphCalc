@@ -1,54 +1,54 @@
 # GraphCalc Rebuild
 
-Reviving GraphCalc (GPL, 1999-2003, Visual C++ 6.0 / MFC) in four steps:
+Reviving GraphCalc (GPL-2.0, 1999-2003, Visual C++ 6.0 / MFC) in four steps:
 
-1. Scrub the legacy code so it compiles with a current toolchain. (Done by static analysis; not yet compiled.)
-2. Build a working Windows 11 x64 version from the updated code. **(Current step.)**
-3. Port to Rust and make it publishable in the Microsoft Store.
+1. Scrub the legacy code so it compiles with a current toolchain. (Done.)
+2. Build a working Windows 11 x64 version from the updated code. (Done; dirty-side details in `Legacy Code/`.)
+3. Rewrite in Rust and make it publishable in the Microsoft Store. **(Current step; plan in `STEP3-PLAN.md`.)**
 4. Design additional features.
 
-## Where things are
+## Clean-room rule (read before doing anything)
 
-- `Legacy Code/Win32/` - the original MFC sources, already patched for Step 1.
-- `Legacy Code/Win32/GrphCalc.vcxproj` - the build project (v145 toolset, Visual Studio 2026 Insiders, MFC shared DLL, MBCS, C++14).
-- `Legacy Code/Win32/PORTING.md` - **read this first.** Every Step 1 change, the deliberate compromises and the list of things expected to break on first compile.
-- `GraphCalc/` - an empty UWP template project. Not part of Step 2; do not build it.
+The Rust engine and script interpreter are a **clean-room rewrite** (owner decision L2), so that new code can carry a new licence instead of GPL-2.0. Every session is one of two kinds, and the kind is fixed for the whole session:
 
-## Building (Step 2)
+| | Clean-side session | Dirty-side session |
+|---|---|---|
+| Purpose | Writes Rust code in `rust/` | Writes behaviour specifications in `spec/`, captures golden results, maintains the legacy build |
+| May read | `rust/`, `spec/`, `LICENSES/`, this file, `STEP3-PLAN.md` | Everything |
+| Must never read | **Anything under `Legacy Code/`**, including its documents, licence file and build logs, and `build.log` at the repository root | (no limit) |
+| May write | `rust/` only (plus `LICENSES/`, `REUSE.toml`, `deny.toml` and `.gitignore` during Phase 0) | `spec/` and `Legacy Code/` only; **never `rust/`** |
+| Starts in | the `rust\` folder (the repository root only for Phase 0, before `rust\` exists) | the repository root |
 
-Run from a Developer PowerShell for Visual Studio 2026 (version 18) so `msbuild` is on the path:
+- If you are not told which kind you are, you are **clean-side**. Do not open `Legacy Code/` to find out.
+- A clean-side session that reads anything under `Legacy Code/`, even by accident or through a search result, must stop, tell the owner, and do no further work in `rust/`. Scope every Grep and Glob to `rust/` or `spec/`; never search the whole repository.
+- Clean-side sessions learn behaviour only from `spec/` (including the golden results in `spec/golden/`) and from the owner. If the spec does not cover something, ask the owner; do not guess, and do not reproduce source code remembered from GraphCalc or any other program.
+- Dirty-side rules are in `Legacy Code/CLAUDE.md`. Clean-side sessions must not read that file either.
 
-```
-msbuild "Legacy Code\Win32\GrphCalc.vcxproj" /p:Configuration=Debug /p:Platform=x64 /m /fl "/flp:logfile=build.log;verbosity=normal"
-```
+## Licensing and provenance
 
-Work through the errors in small batches. After each batch, rebuild and check the error count went down.
-
-This work may run unattended across usage-limit resets. Keep a short running log at the bottom of `PORTING.md` (date, error count before and after, what was fixed) so progress survives a restart.
-
-Default effort is medium. If a problem genuinely needs deeper reasoning (for example a design decision, an MFC behaviour question, or the same error surviving two fix attempts), stop and ask the owner to switch to `/effort high` rather than guessing.
+- `Legacy Code/` is GPL-2.0-only.
+- Rust code written on the clean side is **new** and carries `SPDX-License-Identifier: LicenseRef-NewCode-TBD` until the owner chooses the new licence (decision L3).
+- Every new file gets an SPDX header (`SPDX-FileCopyrightText` and `SPDX-License-Identifier`), following the REUSE specification. `reuse lint` must pass.
+- `rust/PROVENANCE.md` lists every Rust source file with its origin (`new` or `derived`) and the spec sections it implements, plus the table of libraries that replaced legacy components.
+- Dependencies must offer a licence that is compatible with GPL-2.0 (for example MIT, BSD, ISC, zlib); `cargo deny check` enforces the allow-list. Never add a dependency that is Apache-2.0-only or GPL-3.0.
 
 ## Shell commands (keep permission prompts down)
 
 The owner approves commands by hand, and PowerShell commands containing subexpressions prompt every time, even when an allow rule covers them. So:
 
 - Run one plain command per tool call. Do not chain with `;`, `&&`, `|` or wrap in `$(...)`, `@(...)`, `{...}` script blocks or `ForEach-Object`.
-- Run the build with exactly the command shown above, unchanged, so a single "don't ask again" approval keeps covering it.
-- To inspect `build.log` or source files, use the Read and Grep tools, not `Select-String`, `Get-Content` pipelines or other PowerShell one-liners.
-- Use the Edit tool for file changes, never PowerShell or `sed`.
+- To inspect logs or source files, use the Read and Grep tools, not `Select-String`, `Get-Content` pipelines or other PowerShell one-liners.
+- Use the Edit and Write tools for file changes, never PowerShell or `sed`.
 
-## Rules for changes
+## General rules
 
-- Keep fixes minimal and behaviour-preserving. This is a port, not a rewrite. No refactoring, renaming or reformatting.
-- Source files use CRLF line endings. Most are plain ASCII; files that contain non-ASCII characters are UTF-8 with a byte-order mark (converted from Latin-1 in Step 2, see `PORTING.md`). Preserve both. Do not introduce non-ASCII characters into string literals or resource files without asking, because the program is built as multi-byte (MBCS), not Unicode.
-- Do not delete files. Do not edit the `.dsp`, `.dsw`, CVS folders or other VC6 artifacts.
-- Do not commit or push unless asked.
-- Record every change that is not an obvious compile fix in `PORTING.md` (what, why, where).
-- If a fix would change program behaviour, or contradicts `PORTING.md`, stop and ask instead of guessing.
+- Do not delete files. Do not commit or push unless asked.
+- Ask before installing any tool or adding any dependency.
+- Default effort is medium. If a problem genuinely needs deeper reasoning, stop and ask the owner to switch to `/effort high` rather than guessing.
 
 ## Working with the owner
 
-- The owner is a network engineer, not a programmer. Explain what a change does and why in plain terms; do not expect them to read C++.
+- The owner is a network engineer, not a programmer. Explain what a change does and why in plain terms; do not expect them to read code.
 - Security and accuracy matter more than speed. Say when something is unverified.
 - Cite sources for claims about toolchains, APIs or platform behaviour.
 - Written documents use IEEE (2006) reference formatting.
